@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Golden Bid | Browse Auctions</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+ <link rel="icon" href="assets/icons/favicon.ico" />
+<link rel="icon" type="image/png" sizes="96x96" href="assets/icons/favicon-96x96.png" />
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+
+
+
+    <!-- JS -->
+  <script type="module" src="js/main.js"></script>
+
+</head>
+<body data-page="home" class="flex min-h-screen flex-col bg-emerald-50 text-slate-900">
+
+
+  <!-- HEADER -->
+<header class="bg-emerald-950 text-white">
+  <div class="mx-auto max-w-6xl px-4 py-3">
+
+    <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
+
+      <!-- Logo -->
+      <a href="index.html" class="flex shrink-0 items-center gap-2">
+        <img
+          src="assets/icons/logo.png"
+          alt="The Golden Bid logo"
+          class="h-16 w-14 shrink-0 "
+        />
+        <span class="hidden text-sm font-semibold tracking-wide text-amber-400 sm:inline">
+          THE GOLDEN BID
+        </span>
+      </a>
+
+      <a
+        href="index.html"
+        class="order-3 w-full rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300
+               sm:order-none sm:w-auto"
+      >
+        Browse Auctions
+      </a>
+
+      <!-- Search -->
+      <form
+        class="order-4 flex w-full items-center gap-2
+               sm:order-none sm:ml-auto sm:w-full sm:max-w-md"
+      >
+        <label for="search" class="sr-only">Search auctions</label>
+        <input
+          id="search"
+          type="search"
+          placeholder="Search auctions…"
+          class="w-full rounded-md bg-white px-3 py-2 text-sm text-emerald-950 placeholder:text-emerald-700
+                 focus:outline-none focus:ring-2 focus:ring-amber-400"
+        />
+        <button
+          type="submit"
+          class="shrink-0 rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
+        >
+          Search
+        </button>
+      </form>
+
+      <!-- Profile -->
+      <div class="order-2 ml-auto flex items-center gap-2 sm:order-none sm:ml-0">
+        <a
+          href="login.html"
+          class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900 sm:inline-block"
+        >
+          Login / Sign up
+        </a>
+
+        <a
+          href="profile.html"
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-400
+                 text-emerald-950 text-lg leading-none hover:bg-amber-300"
+          aria-label="Profile"
+        >
+          👤
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</header>
+
+
+  <!-- MAIN -->
+  <main class="mx-auto max-w-6xl px-4 py-10">
+<!-- HERO -->
+<section class="px-6 py-10 text-center">
+  <img
+    src="assets/icons/logo.png"
+    alt="The Golden Bid"
+    class="mx-auto h-24 w-20"
+  />
+
+  <h1 class="mt-6 text-3xl font-bold tracking-tight text-amber-600 sm:text-4xl">
+    Welcome to The Golden Bid
+  </h1>
+
+  <p class="mx-auto mt-3 max-w-2xl text-slate-600">
+    Where premium items meet passionate collectors. Join the auction, place your bid,
+    and claim your prize.
+  </p>
+
+  <div class="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+    <a
+      href="login.html"
+      class="inline-flex items-center gap-2 rounded-md bg-amber-400 px-5 py-2.5 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
+    >
+      Start Bidding <span aria-hidden="true">→</span>
+    </a>
+
+    <a
+      href="#browse"
+      class="inline-flex items-center justify-center rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-emerald-950 ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
+    >
+      Browse Auctions
+    </a>
+  </div>
+
+  <!-- STATS -->
+  <div class="mt-8 grid gap-4 sm:grid-cols-3">
+    <div class="rounded-xl bg-white/60 px-4 py-5 text-center shadow-sm ring-1 ring-inset ring-emerald-200">
+      <div class="text-lg">🔨</div>
+      <div class="mt-2 text-2xl font-bold text-emerald-950">
+        <span id="activeAuctionsCount">—</span>
+      </div>
+      <div class="text-sm text-slate-600">Active Auctions</div>
+    </div>
+
+    <div class="rounded-xl bg-white/60 px-4 py-5 text-center shadow-sm ring-1 ring-inset ring-emerald-200">
+      <div class="text-lg">📈</div>
+      <div class="mt-2 text-2xl font-bold text-emerald-950">1,000</div>
+      <div class="text-sm text-slate-600">Starting Credits</div>
+    </div>
+
+    <div class="rounded-xl bg-white/60 px-4 py-5 text-center shadow-sm ring-1 ring-inset ring-emerald-200">
+      <div class="text-lg">⏱️</div>
+      <div class="mt-2 text-2xl font-bold text-emerald-950">24/7</div>
+      <div class="text-sm text-slate-600">Live Bidding</div>
+    </div>
+  </div>
+</section>
+
+    <!-- Page heading -->
+    <section class="mb-8">
+<h2 class="text-3xl font-bold text-emerald-950">Browse active auctions</h2>
+
+      <p class="mt-2 max-w-2xl text-slate-600">
+        Discover exclusive items and place your bids using credits.
+      </p>
+    </section>
+
+    <!-- Listings grid -->
+<section id="browse" aria-label="Auction listings">
+  <div id="listingsStatus" class="text-slate-600">
+    Loading listings…
+  </div>
+
+  <div
+    id="listingsGrid"
+    class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+  ></div>
+</section>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto bg-emerald-950 text-slate-300">
+    <div class="mx-auto max-w-6xl px-4 py-6 text-sm">
+      © 2026 The Golden Bid. Semester Project 2.
+    </div>
+  </footer>
+
+
+</body>
+</html>
