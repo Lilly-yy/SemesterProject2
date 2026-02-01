@@ -19,7 +19,7 @@
     <script type="module" src="js/main.js"></script>
   </head>
   <body
-    data-page="home"
+    data-page="browse"
     class="flex min-h-screen flex-col bg-emerald-50 text-slate-900"
   >
     <!-- HEADER -->
@@ -107,96 +107,36 @@
 
     <!-- MAIN -->
     <main class="mx-auto max-w-6xl px-4 py-10">
-      <!-- HERO -->
-      <section class="px-6 py-10 text-center">
-        <img
-          src="assets/icons/logo.png"
-          alt="The Golden Bid"
-          class="mx-auto h-24 w-20"
-        />
-
-        <h1
-          class="mt-6 text-3xl font-bold tracking-tight text-amber-600 sm:text-4xl"
-        >
-          Welcome to The Golden Bid
-        </h1>
-
-        <p class="mx-auto mt-3 max-w-2xl text-slate-600">
-          Where premium items meet passionate collectors. Join the auction,
-          place your bid, and claim your prize.
-        </p>
-
-        <div
-          class="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row"
-        >
-          <a
-            href="login.html"
-            class="inline-flex items-center gap-2 rounded-md bg-amber-400 px-5 py-2.5 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
-          >
-            Start Bidding <span aria-hidden="true">→</span>
-          </a>
-
-          <a
-            href="/browse.html"
-            class="inline-flex items-center justify-center rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-emerald-950 ring-1 ring-inset ring-slate-200 hover:bg-slate-50"
-          >
-            Browse Auctions
-          </a>
-        </div>
-
-        <!-- STATS -->
-        <div class="mt-8 grid gap-4 sm:grid-cols-3">
-          <div
-            class="rounded-xl bg-white/60 px-4 py-5 text-center shadow-sm ring-1 ring-inset ring-emerald-200"
-          >
-            <div class="text-lg">🔨</div>
-            <div class="mt-2 text-2xl font-bold text-emerald-950">
-              <span id="activeAuctionsCount">—</span>
-            </div>
-            <div class="text-sm text-slate-600">Active Auctions</div>
-          </div>
-
-          <div
-            class="rounded-xl bg-white/60 px-4 py-5 text-center shadow-sm ring-1 ring-inset ring-emerald-200"
-          >
-            <div class="text-lg">📈</div>
-            <div class="mt-2 text-2xl font-bold text-emerald-950">1,000</div>
-            <div class="text-sm text-slate-600">Starting Credits</div>
-          </div>
-
-          <div
-            class="rounded-xl bg-white/60 px-4 py-5 text-center shadow-sm ring-1 ring-inset ring-emerald-200"
-          >
-            <div class="text-lg">⏱️</div>
-            <div class="mt-2 text-2xl font-bold text-emerald-950">24/7</div>
-            <div class="text-sm text-slate-600">Live Bidding</div>
-          </div>
-        </div>
-      </section>
-
       <!-- Page heading -->
       <section class="mb-8">
-        <h2 class="text-3xl font-bold text-emerald-950">
-          Auctions ending soon
-        </h2>
-
-        <p class="mt-2 max-w-2xl text-slate-600">
-          Discover exclusive items and place your bids using credits.
-        </p>
+        <h2 class="text-3xl font-bold text-emerald-950">Browse all auctions</h2>
       </section>
 
       <div
         class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"
       >
+        <div>
+          <label
+            for="sortSelect"
+            class="block text-sm font-semibold text-emerald-950"
+            >Sort</label
+          >
+          <select
+            id="sortSelect"
+            class="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
+          >
+            <option value="endingSoon">Ending soon</option>
+            <option value="newest">Newest</option>
+            <option value="priceHigh">Highest bid</option>
+            <option value="priceLow">Lowest bid</option>
+          </select>
+        </div>
+
         <div class="flex items-center gap-2">
-          <input
-            id="activeOnly"
-            type="checkbox"
-            checked
-            class="h-4 w-4"
-            ,
-            hidden
-          />
+          <input id="activeOnly" type="checkbox" checked class="h-4 w-4" />
+          <label for="activeOnly" class="text-sm text-slate-700"
+            >Active only</label
+          >
         </div>
       </div>
 

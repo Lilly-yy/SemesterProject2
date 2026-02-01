@@ -21,9 +21,6 @@ export async function fetchJson(url, options = {}) {
   return payload;
 }
 
-/**
- * Helper for endpoints that require Authorization header.
- */
 export async function fetchAuthJson(url, accessToken, options = {}) {
   return fetchJson(url, {
     ...options,

@@ -58,11 +58,11 @@ export function initLoginForm() {
         accessToken: auth.accessToken,
         name: auth.name,
         email: auth.email,
-        avatar: auth.avatar,   
-        banner: auth.banner,   
+        avatar: auth.avatar,
+        banner: auth.banner,
       });
 
-      window.location.href = "profile.html";
+      window.location.href = "/";
     } catch (err) {
       status.textContent = `Login failed: ${err.message}`;
     }

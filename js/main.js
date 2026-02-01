@@ -3,10 +3,20 @@ import { renderListings } from "./ui/renderListings.js";
 import { getListingById } from "./api/singleListing.js";
 import { renderSingleListing } from "./ui/renderSingleListing.js";
 import { initLoginForm, initRegisterForm } from "./ui/authForms.js";
+import { initProfilePage } from "./ui/profile.js";
+import { initHeader } from "./ui/header.js";
+import { decorateListings } from "./utils/listingTransform.js";
+import { filterListings } from "./utils/listingFilter.js";
+import { sortListings as sortListingsUtil } from "./utils/listingSort.js";
 
 const DEBUG = false;
+
 function isHomePage() {
   return document.body.dataset.page === "home";
+}
+
+function isBrowsePage() {
+  return document.body.dataset.page === "browse";
 }
 
 function isListingPage() {
@@ -21,11 +31,47 @@ function isRegisterPage() {
   return document.body.dataset.page === "register";
 }
 
+function isProfilePage() {
+  return document.body.dataset.page === "profile";
+}
+
 async function loadHomeListings() {
+  const statusEl = document.getElementById("listingsStatus");
+  const gridEl = document.getElementById("listingsGrid");
+  if (!statusEl || !gridEl) return;
+
+  try {
+    statusEl.textContent = "Loading listings…";
+
+    // Home: always active-only, ending soon, show top 12
+    const { listings } = await getListings({ limit: 50, activeOnly: true });
+
+    const decorated = decorateListings(listings);
+    const filtered = filterListings(decorated, { activeOnly: true });
+    const sorted = sortListingsUtil(filtered, "endingSoon");
+    const top12 = sorted.slice(0, 12);
+
+    // Stats: show total active auctions
+    const countEl = document.getElementById("activeAuctionsCount");
+    if (countEl) countEl.textContent = String(filtered.length);
+
+    statusEl.textContent = "";
+    renderListings(gridEl, top12);
+  } catch (err) {
+    statusEl.textContent = `Could not load listings: ${err.message}`;
+    gridEl.innerHTML = "";
+    if (DEBUG) console.error(err);
+  }
+}
+
+async function loadBrowseListings() {
   const statusEl = document.getElementById("listingsStatus");
   const gridEl = document.getElementById("listingsGrid");
   const searchInput = document.getElementById("search");
   const searchForm = searchInput?.closest("form");
+
+  const sortSelectEl = document.getElementById("sortSelect");
+  const activeOnlyEl = document.getElementById("activeOnly");
 
   if (!statusEl || !gridEl) return;
 
@@ -33,13 +79,30 @@ async function loadHomeListings() {
     try {
       statusEl.textContent = "Loading listings…";
 
-      const { listings } = await getListings({ limit: 12, q: query });
+      const activeOnly = Boolean(activeOnlyEl?.checked);
 
+      // Browse: fetch based on controls
+      const { listings } = await getListings({
+        limit: 50,
+        q: query,
+        activeOnly,
+      });
+
+      const decorated = decorateListings(listings);
+      const filtered = filterListings(decorated, { activeOnly });
+
+      const sortValue = sortSelectEl?.value || "endingSoon";
+      const sorted = sortListingsUtil(filtered, sortValue);
+
+      // Stats: always show active count (label says "Active Auctions")
       const countEl = document.getElementById("activeAuctionsCount");
-      if (countEl) countEl.textContent = String(listings.length);
+      if (countEl) {
+        const activeCount = decorated.filter((l) => l.active).length;
+        countEl.textContent = String(activeCount);
+      }
 
       statusEl.textContent = "";
-      renderListings(gridEl, listings);
+      renderListings(gridEl, sorted);
     } catch (err) {
       statusEl.textContent = `Could not load listings: ${err.message}`;
       gridEl.innerHTML = "";
@@ -57,6 +120,13 @@ async function loadHomeListings() {
       run(searchInput.value.trim());
     });
   }
+
+  function rerunCurrent() {
+    run(searchInput?.value.trim() || "");
+  }
+
+  sortSelectEl?.addEventListener("change", rerunCurrent);
+  activeOnlyEl?.addEventListener("change", rerunCurrent);
 }
 
 async function loadSingleListing() {
@@ -73,7 +143,7 @@ async function loadSingleListing() {
 
   try {
     statusEl.textContent = "Loading listing…";
-    const { listing } = await getListingById(id);
+    const listing = await getListingById(id);
     statusEl.textContent = "";
     renderSingleListing(listing);
   } catch (err) {
@@ -83,8 +153,12 @@ async function loadSingleListing() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  initHeader();
+
   if (isHomePage()) loadHomeListings();
+  if (isBrowsePage()) loadBrowseListings();
   if (isListingPage()) loadSingleListing();
   if (isLoginPage()) initLoginForm();
   if (isRegisterPage()) initRegisterForm();
+  if (isProfilePage()) initProfilePage();
 });

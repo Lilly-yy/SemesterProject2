@@ -2,7 +2,11 @@ function formatEnds(endsAt) {
   if (!endsAt) return "—";
   const d = new Date(endsAt);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" });
+  return d.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
 }
 
 function getHighestBid(bids = []) {
@@ -11,8 +15,10 @@ function getHighestBid(bids = []) {
 }
 
 function getFirstImage(media) {
-  if (Array.isArray(media) && media.length > 0 && typeof media[0] === "string") return media[0];
-  if (Array.isArray(media) && media[0] && typeof media[0].url === "string") return media[0].url;
+  if (Array.isArray(media) && media.length > 0 && typeof media[0] === "string")
+    return media[0];
+  if (Array.isArray(media) && media[0] && typeof media[0].url === "string")
+    return media[0].url;
   return "";
 }
 
@@ -30,7 +36,7 @@ export function renderListings(gridEl, listings) {
     const highest = getHighestBid(l.bids);
     const img = getFirstImage(l.media || l.mediaUrls || l.media_urls);
 
-    // Store id 
+    // Store id
     const id = l.id || l._id || "";
 
     return `

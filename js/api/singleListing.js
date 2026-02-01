@@ -1,4 +1,11 @@
 import { fetchJson } from "./http.js";
+import { API_BASE_URL } from "./config.js";
+
+export async function getListingById(id) {
+  const url = `${API_BASE_URL}/auction/listings/${id}?_bids=true`;
+  const payload = await fetchJson(url);
+  return payload.data;
+}
 
 const BASE_URLS = [
   "https://api.noroff.dev/api/v2/auction",
@@ -9,7 +16,8 @@ const BASE_URLS = [
 function buildUrl(base, path, params = {}) {
   const url = new URL(base + path);
   for (const [k, v] of Object.entries(params)) {
-    if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, String(v));
+    if (v !== undefined && v !== null && v !== "")
+      url.searchParams.set(k, String(v));
   }
   return url.toString();
 }
@@ -17,21 +25,4 @@ function buildUrl(base, path, params = {}) {
 function normalizeOne(payload) {
   if (payload && payload.data) return payload.data;
   return payload;
-}
-
-export async function getListingById(id) {
-  let lastError = null;
-
-  for (const base of BASE_URLS) {
-    try {
-    
-      const url = buildUrl(base, `/listings/${id}`, { _bids: true });
-      const payload = await fetchJson(url);
-      return { baseUsed: base, listing: normalizeOne(payload) };
-    } catch (err) {
-      lastError = err;
-    }
-  }
-
-  throw lastError || new Error("Could not load listing.");
 }

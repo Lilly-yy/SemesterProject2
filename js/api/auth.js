@@ -1,7 +1,15 @@
 import { API_BASE_URL } from "./config.js";
 import { fetchJson } from "./http.js";
 
-export async function registerUser({ name, email, password, bio, avatar, banner, venueManager }) {
+export async function registerUser({
+  name,
+  email,
+  password,
+  bio,
+  avatar,
+  banner,
+  venueManager,
+}) {
   const payload = await fetchJson(`${API_BASE_URL}/auth/register`, {
     method: "POST",
     body: JSON.stringify({

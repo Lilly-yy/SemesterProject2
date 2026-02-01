@@ -1,111 +1,119 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Golden Bid | Browse Auctions</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Golden Bid | Browse Auctions</title>
 
-  <link rel="stylesheet" href="css/styles.css" />
- <link rel="icon" href="assets/icons/favicon.ico" />
-<link rel="icon" type="image/png" sizes="96x96" href="assets/icons/favicon-96x96.png" />
-<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
-
-
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" href="assets/icons/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="assets/icons/favicon-96x96.png"
+    />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
 
     <!-- Scripts -->
-  <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body
+    data-page="create-listing"
+    class="flex min-h-screen flex-col bg-emerald-50 text-slate-900"
+  >
+    <!-- HEADER -->
+    <header class="bg-emerald-950 text-white">
+      <div class="mx-auto max-w-6xl px-4 py-3">
+        <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
+          <!-- Logo -->
+          <a href="index.html" class="flex shrink-0 items-center gap-2">
+            <img
+              src="assets/icons/logo.png"
+              alt="The Golden Bid logo"
+              class="h-16 w-14 shrink-0"
+            />
+            <span
+              class="hidden text-sm font-semibold tracking-wide text-amber-400 sm:inline"
+            >
+              THE GOLDEN BID
+            </span>
+          </a>
 
-</head>
-<body data-page="create-listing" class="flex min-h-screen flex-col bg-emerald-50 text-slate-900">
+          <a
+            href="index.html"
+            class="order-3 w-full rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300 sm:order-none sm:w-auto"
+          >
+            Browse Auctions
+          </a>
 
+          <!-- Search -->
+          <form
+            class="order-4 flex w-full items-center gap-2 sm:order-none sm:ml-auto sm:w-full sm:max-w-md"
+          >
+            <label for="search" class="sr-only">Search auctions</label>
+            <input
+              id="search"
+              type="search"
+              placeholder="Search auctions…"
+              class="w-full rounded-md bg-white px-3 py-2 text-sm text-emerald-950 placeholder:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
+            />
+            <button
+              type="submit"
+              class="shrink-0 rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
+            >
+              Search
+            </button>
+          </form>
 
-  <!-- HEADER -->
-<header class="bg-emerald-950 text-white">
-  <div class="mx-auto max-w-6xl px-4 py-3">
+          <!-- Profile -->
+          <!-- Profile -->
+          <div
+            class="order-2 ml-auto flex items-center gap-2 sm:order-none sm:ml-0"
+          >
+            <a
+              id="headerLoginLink"
+              href="login.html"
+              class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900 sm:inline-block"
+            >
+              Login / Sign up
+            </a>
 
-    <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
+            <button
+              id="headerLogoutBtn"
+              type="button"
+              class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900 sm:inline-block"
+            >
+              Logout
+            </button>
 
-      <!-- Logo -->
-      <a href="index.html" class="flex shrink-0 items-center gap-2">
-        <img
-          src="assets/icons/logo.png"
-          alt="The Golden Bid logo"
-          class="h-16 w-14 shrink-0 "
-        />
-        <span class="hidden text-sm font-semibold tracking-wide text-amber-400 sm:inline">
-          THE GOLDEN BID
-        </span>
-      </a>
-
-      <a
-        href="index.html"
-        class="order-3 w-full rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300
-               sm:order-none sm:w-auto"
-      >
-        Browse Auctions
-      </a>
-
-      <!-- Search -->
-      <form
-        class="order-4 flex w-full items-center gap-2
-               sm:order-none sm:ml-auto sm:w-full sm:max-w-md"
-      >
-        <label for="search" class="sr-only">Search auctions</label>
-        <input
-          id="search"
-          type="search"
-          placeholder="Search auctions…"
-          class="w-full rounded-md bg-white px-3 py-2 text-sm text-emerald-950 placeholder:text-emerald-700
-                 focus:outline-none focus:ring-2 focus:ring-amber-400"
-        />
-        <button
-          type="submit"
-          class="shrink-0 rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
-        >
-          Search
-        </button>
-      </form>
-
-      <!-- Profile -->
-      <div class="order-2 ml-auto flex items-center gap-2 sm:order-none sm:ml-0">
-        <a
-          href="login.html"
-          class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900 sm:inline-block"
-        >
-          Login / Sign up
-        </a>
-
-        <a
-          href="profile.html"
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-400
-                 text-emerald-950 text-lg leading-none hover:bg-amber-300"
-          aria-label="Profile"
-        >
-          👤
-        </a>
+            <a
+              id="headerProfileLink"
+              href="profile.html"
+              class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-amber-400 text-emerald-950 text-lg leading-none hover:bg-amber-300"
+              aria-label="Profile"
+            >
+              <img
+                id="headerAvatar"
+                src=""
+                alt="Profile avatar"
+                class="hidden h-full w-full object-cover"
+              />
+              <span id="headerAvatarFallback" aria-hidden="true">👤</span>
+            </a>
+          </div>
+        </div>
       </div>
+    </header>
 
-    </div>
+    <!-- MAIN -->
+    <main class="mx-auto max-w-6xl px-4 py-10">Create listing</main>
 
-  </div>
-</header>
-
-
-  <!-- MAIN -->
-  <main class="mx-auto max-w-6xl px-4 py-10">
-
-
-    Create listing 
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="mt-auto bg-emerald-950 text-slate-300">
-    <div class="mx-auto max-w-6xl px-4 py-6 text-sm">
-      © 2026 The Golden Bid. Semester Project 2.
-    </div>
-  </footer>
-
-
-</body>
+    <!-- FOOTER -->
+    <footer class="mt-auto bg-emerald-950 text-slate-300">
+      <div class="mx-auto max-w-6xl px-4 py-6 text-sm">
+        © 2026 The Golden Bid. Semester Project 2.
+      </div>
+    </footer>
+  </body>
 </html>
