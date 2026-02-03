@@ -8,6 +8,7 @@ import { initHeader } from "./ui/header.js";
 import { decorateListings } from "./utils/listingTransform.js";
 import { filterListings } from "./utils/listingFilter.js";
 import { sortListings as sortListingsUtil } from "./utils/listingSort.js";
+import { searchListingsAll } from "./api/searchListings.js";
 
 const DEBUG = false;
 
@@ -43,7 +44,6 @@ async function loadHomeListings() {
   try {
     statusEl.textContent = "Loading listings…";
 
-    // Home: always active-only, ending soon, show top 12
     const { listings } = await getListings({ limit: 50, activeOnly: true });
 
     const decorated = decorateListings(listings);
@@ -51,7 +51,6 @@ async function loadHomeListings() {
     const sorted = sortListingsUtil(filtered, "endingSoon");
     const top12 = sorted.slice(0, 12);
 
-    // Stats: show total active auctions
     const countEl = document.getElementById("activeAuctionsCount");
     if (countEl) countEl.textContent = String(filtered.length);
 
@@ -73,20 +72,64 @@ async function loadBrowseListings() {
   const sortSelectEl = document.getElementById("sortSelect");
   const activeOnlyEl = document.getElementById("activeOnly");
 
+  // Pagination elements
+  const prevBtn = document.getElementById("pagePrev");
+  const nextBtn = document.getElementById("pageNext");
+  const pageInfoEl = document.getElementById("pageInfo");
+
   if (!statusEl || !gridEl) return;
+
+  let page = 1;
+  const limit = 15;
+
+  function getQuery() {
+    return (searchInput?.value || "").trim();
+  }
+
+  function updatePaginationUI(meta) {
+    if (pageInfoEl && meta) {
+      pageInfoEl.textContent = `Page ${meta.currentPage} of ${meta.pageCount} (${meta.totalCount} total)`;
+    } else if (pageInfoEl) {
+      pageInfoEl.textContent = "Page —";
+    }
+
+    if (prevBtn) prevBtn.disabled = Boolean(meta?.isFirstPage);
+    if (nextBtn) nextBtn.disabled = Boolean(meta?.isLastPage);
+  }
+
+  // Disable pages when we show all search results on one page
+  function disablePaginationForSearch(shownCount, totalCount) {
+    if (pageInfoEl) pageInfoEl.textContent = `Showing ${shownCount} of ${totalCount}`;
+    if (prevBtn) prevBtn.disabled = true;
+    if (nextBtn) nextBtn.disabled = true;
+  }
 
   async function run(query = "") {
     try {
       statusEl.textContent = "Loading listings…";
 
       const activeOnly = Boolean(activeOnlyEl?.checked);
+      const trimmedQuery = String(query || "").trim();
 
-      // Browse: fetch based on controls
-      const { listings } = await getListings({
-        limit: 50,
-        q: query,
-        activeOnly,
-      });
+      let listings = [];
+      let meta = null;
+
+      if (trimmedQuery) {
+        // Fetch ALL search results across pages
+        const res = await searchListingsAll({
+          q: trimmedQuery,
+          activeOnly,
+          perPage: 50,
+          maxItems: 300,
+        });
+
+        listings = res.listings;
+      } else {
+        // Normal paged browse
+        const res = await getListings({ limit, page, activeOnly });
+        listings = res.listings;
+        meta = res.meta;
+      }
 
       const decorated = decorateListings(listings);
       const filtered = filterListings(decorated, { activeOnly });
@@ -94,18 +137,30 @@ async function loadBrowseListings() {
       const sortValue = sortSelectEl?.value || "endingSoon";
       const sorted = sortListingsUtil(filtered, sortValue);
 
-      // Stats: always show active count (label says "Active Auctions")
+      // Status + pages
+      if (trimmedQuery) {
+        statusEl.textContent = `Showing ${filtered.length}${
+          activeOnly ? " active" : ""
+        } of ${decorated.length} results for “${trimmedQuery}”.`;
+
+        disablePaginationForSearch(filtered.length, decorated.length);
+      } else {
+        statusEl.textContent = "";
+        updatePaginationUI(meta);
+      }
+
+      // Stats box
       const countEl = document.getElementById("activeAuctionsCount");
       if (countEl) {
         const activeCount = decorated.filter((l) => l.active).length;
         countEl.textContent = String(activeCount);
       }
 
-      statusEl.textContent = "";
       renderListings(gridEl, sorted);
     } catch (err) {
       statusEl.textContent = `Could not load listings: ${err.message}`;
       gridEl.innerHTML = "";
+      updatePaginationUI(null);
       if (DEBUG) console.error(err);
     }
   }
@@ -113,20 +168,47 @@ async function loadBrowseListings() {
   // Initial load
   await run("");
 
-  // Search submit
+  // Search submit -> reset to page 1
   if (searchForm && searchInput) {
     searchForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      run(searchInput.value.trim());
+      page = 1;
+      run(getQuery());
     });
   }
 
+  // Sort/filter change -> reset to page 1
   function rerunCurrent() {
-    run(searchInput?.value.trim() || "");
+    page = 1;
+    run(getQuery());
   }
 
   sortSelectEl?.addEventListener("change", rerunCurrent);
   activeOnlyEl?.addEventListener("change", rerunCurrent);
+
+  // Clicking the X (or clearing input) should reset results
+  if (searchInput) {
+    const handleMaybeCleared = () => {
+      if (getQuery() === "") {
+        page = 1;
+        run("");
+      }
+    };
+
+    searchInput.addEventListener("input", handleMaybeCleared);
+    searchInput.addEventListener("search", handleMaybeCleared);
+  }
+
+  // Prev/Next 
+  prevBtn?.addEventListener("click", () => {
+    if (page > 1) page -= 1;
+    run(getQuery());
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    page += 1;
+    run(getQuery());
+  });
 }
 
 async function loadSingleListing() {

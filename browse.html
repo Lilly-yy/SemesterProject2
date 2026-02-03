@@ -15,18 +15,23 @@
     />
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
 
-    <!-- JS -->
     <script type="module" src="js/main.js"></script>
   </head>
+
   <body
     data-page="browse"
     class="flex min-h-screen flex-col bg-emerald-50 text-slate-900"
   >
-    <!-- HEADER -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded focus:bg-white focus:px-3 focus:py-2"
+    >
+      Skip to content
+    </a>
+
     <header class="bg-emerald-950 text-white">
       <div class="mx-auto max-w-6xl px-4 py-3">
         <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
-          <!-- Logo -->
           <a href="index.html" class="flex shrink-0 items-center gap-2">
             <img
               src="assets/icons/logo.png"
@@ -42,13 +47,15 @@
 
           <a
             href="browse.html"
+            aria-current="page"
             class="order-3 w-full rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300 sm:order-none sm:w-auto"
           >
             Browse Auctions
           </a>
 
-          <!-- Search -->
           <form
+            role="search"
+            action="#"
             class="order-4 flex w-full items-center gap-2 sm:order-none sm:ml-auto sm:w-full sm:max-w-md"
           >
             <label for="search" class="sr-only">Search auctions</label>
@@ -66,7 +73,6 @@
             </button>
           </form>
 
-          <!-- Profile -->
           <div
             class="order-2 ml-auto flex items-center gap-2 sm:order-none sm:ml-0"
           >
@@ -105,11 +111,9 @@
       </div>
     </header>
 
-    <!-- MAIN -->
-    <main class="mx-auto max-w-6xl px-4 py-10">
-      <!-- Page heading -->
+    <main id="main" class="mx-auto max-w-6xl px-4 py-10">
       <section class="mb-8">
-        <h2 class="text-3xl font-bold text-emerald-950">Browse all auctions</h2>
+        <h1 class="text-3xl font-bold text-emerald-950">Browse all auctions</h1>
       </section>
 
       <div
@@ -140,18 +144,40 @@
         </div>
       </div>
 
-      <!-- Listings grid -->
-      <section id="browse" aria-label="Auction listings">
-        <div id="listingsStatus" class="text-slate-600">Loading listings…</div>
+      <section aria-label="Auction listings" class="mt-6">
+        <div id="listingsStatus" class="text-slate-600" aria-live="polite">
+          Loading listings…
+        </div>
 
         <div
           id="listingsGrid"
           class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
         ></div>
       </section>
+      <nav class="mt-8 flex items-center justify-between" aria-label="Pagination">
+  <button
+    id="pagePrev"
+    type="button"
+    class="rounded-md bg-white px-4 py-2 text-sm font-semibold text-emerald-950 ring-1 ring-inset ring-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:hover:bg-white"
+  >
+    ← Previous
+  </button>
+
+  <p id="pageInfo" class="text-sm text-slate-600">
+    Page —
+  </p>
+
+  <button
+    id="pageNext"
+    type="button"
+    class="rounded-md bg-white px-4 py-2 text-sm font-semibold text-emerald-950 ring-1 ring-inset ring-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:hover:bg-white"
+  >
+    Next →
+  </button>
+</nav>
+
     </main>
 
-    <!-- FOOTER -->
     <footer class="mt-auto bg-emerald-950 text-slate-300">
       <div class="mx-auto max-w-6xl px-4 py-6 text-sm">
         © 2026 The Golden Bid. Semester Project 2.
