@@ -19,14 +19,13 @@
     <script type="module" src="js/main.js"></script>
   </head>
   <body
-    data-page="create-listing"
+    data-page="create"
     class="flex min-h-screen flex-col bg-emerald-50 text-slate-900"
   >
     <!-- HEADER -->
     <header class="bg-emerald-950 text-white">
       <div class="mx-auto max-w-6xl px-4 py-3">
         <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
-          <!-- Logo -->
           <a href="index.html" class="flex shrink-0 items-center gap-2">
             <img
               src="assets/icons/logo.png"
@@ -41,14 +40,16 @@
           </a>
 
           <a
-            href="index.html"
+            href="browse.html"
+            aria-current="page"
             class="order-3 w-full rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300 sm:order-none sm:w-auto"
           >
             Browse Auctions
           </a>
 
-          <!-- Search -->
           <form
+            role="search"
+            action="#"
             class="order-4 flex w-full items-center gap-2 sm:order-none sm:ml-auto sm:w-full sm:max-w-md"
           >
             <label for="search" class="sr-only">Search auctions</label>
@@ -66,25 +67,23 @@
             </button>
           </form>
 
-          <!-- Profile -->
-          <!-- Profile -->
           <div
             class="order-2 ml-auto flex items-center gap-2 sm:order-none sm:ml-0"
           >
             <a
               id="headerLoginLink"
               href="login.html"
-              class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900 sm:inline-block"
+              class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900"
             >
-              Login / Sign up
+              <span class="hidden sm:inline">Login / Sign up</span>
             </a>
 
             <button
               id="headerLogoutBtn"
               type="button"
-              class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900 sm:inline-block"
+              class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900"
             >
-              Logout
+              <span class="hidden sm:inline">Logout</span>
             </button>
 
             <a
@@ -107,7 +106,92 @@
     </header>
 
     <!-- MAIN -->
-    <main class="mx-auto max-w-6xl px-4 py-10">Create listing</main>
+    <main class="mx-auto max-w-2xl px-4 py-10">
+      <h1 class="text-3xl font-bold text-emerald-950">Create listing</h1>
+
+      <form id="createListingForm" class="mt-6 space-y-4">
+        <div>
+          <label class="block text-sm font-semibold" for="title">Title *</label>
+          <input
+            id="title"
+            name="title"
+            class="mt-1 w-full rounded-md border px-3 py-2"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold" for="description"
+            >Description</label
+          >
+          <textarea
+            id="description"
+            name="description"
+            class="mt-1 w-full rounded-md border px-3 py-2"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold" for="endsAt"
+            >Ends at *</label
+          >
+          <input
+            id="endsAt"
+            name="endsAt"
+            type="datetime-local"
+            class="mt-1 w-full rounded-md border px-3 py-2"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold" for="tags"
+            >Tags (comma separated)</label
+          >
+          <input
+            id="tags"
+            name="tags"
+            class="mt-1 w-full rounded-md border px-3 py-2"
+            placeholder="car, toy, vintage"
+          />
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="block text-sm font-semibold" for="imageUrl"
+              >Image URL</label
+            >
+            <input
+              id="imageUrl"
+              name="imageUrl"
+              class="mt-1 w-full rounded-md border px-3 py-2"
+              placeholder="https://..."
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="imageAlt"
+              >Image alt</label
+            >
+            <input
+              id="imageAlt"
+              name="imageAlt"
+              class="mt-1 w-full rounded-md border px-3 py-2"
+              placeholder="Yellow toy car"
+            />
+          </div>
+        </div>
+
+        <div id="createListingStatus" class="text-sm text-slate-600"></div>
+
+        <button
+          type="submit"
+          class="rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
+        >
+          Create listing
+        </button>
+      </form>
+    </main>
 
     <!-- FOOTER -->
     <footer class="mt-auto bg-emerald-950 text-slate-300">

@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Golden Bid | Browse Auctions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" href="assets/icons/favicon.ico" />
@@ -20,13 +26,12 @@
   </head>
   <body
     data-page="home"
-    class="flex min-h-screen flex-col bg-emerald-50 text-slate-900"
+    class="flex min-h-screen flex-col bg-emerald-50 text-slate-900 font-sans"
   >
     <!-- HEADER -->
     <header class="bg-emerald-950 text-white">
       <div class="mx-auto max-w-6xl px-4 py-3">
         <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
-          <!-- Logo -->
           <a href="index.html" class="flex shrink-0 items-center gap-2">
             <img
               src="assets/icons/logo.png"
@@ -42,13 +47,15 @@
 
           <a
             href="browse.html"
+            aria-current="page"
             class="order-3 w-full rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300 sm:order-none sm:w-auto"
           >
             Browse Auctions
           </a>
 
-          <!-- Search -->
           <form
+            role="search"
+            action="#"
             class="order-4 flex w-full items-center gap-2 sm:order-none sm:ml-auto sm:w-full sm:max-w-md"
           >
             <label for="search" class="sr-only">Search auctions</label>
@@ -66,7 +73,6 @@
             </button>
           </form>
 
-          <!-- Profile -->
           <div
             class="order-2 ml-auto flex items-center gap-2 sm:order-none sm:ml-0"
           >

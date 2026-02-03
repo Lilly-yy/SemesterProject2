@@ -9,6 +9,7 @@ import { decorateListings } from "./utils/listingTransform.js";
 import { filterListings } from "./utils/listingFilter.js";
 import { sortListings as sortListingsUtil } from "./utils/listingSort.js";
 import { searchListingsAll } from "./api/searchListings.js";
+import { initCreateListingPage } from "./ui/createListing.js";
 
 const DEBUG = false;
 
@@ -34,6 +35,10 @@ function isRegisterPage() {
 
 function isProfilePage() {
   return document.body.dataset.page === "profile";
+}
+
+function isCreatePage() {
+  return document.body.dataset.page === "create";
 }
 
 async function loadHomeListings() {
@@ -99,7 +104,8 @@ async function loadBrowseListings() {
 
   // Disable pages when we show all search results on one page
   function disablePaginationForSearch(shownCount, totalCount) {
-    if (pageInfoEl) pageInfoEl.textContent = `Showing ${shownCount} of ${totalCount}`;
+    if (pageInfoEl)
+      pageInfoEl.textContent = `Showing ${shownCount} of ${totalCount}`;
     if (prevBtn) prevBtn.disabled = true;
     if (nextBtn) nextBtn.disabled = true;
   }
@@ -199,7 +205,7 @@ async function loadBrowseListings() {
     searchInput.addEventListener("search", handleMaybeCleared);
   }
 
-  // Prev/Next 
+  // Prev/Next
   prevBtn?.addEventListener("click", () => {
     if (page > 1) page -= 1;
     run(getQuery());
@@ -243,4 +249,6 @@ window.addEventListener("DOMContentLoaded", () => {
   if (isLoginPage()) initLoginForm();
   if (isRegisterPage()) initRegisterForm();
   if (isProfilePage()) initProfilePage();
+  if (isCreatePage()) initCreateListingPage();
+
 });
