@@ -95,4 +95,31 @@ export function initHeader() {
       menuBtn.setAttribute("aria-expanded", String(willOpen));
     });
   }
+
+    // Mobile: search 
+  const mobileSearchToggle = document.getElementById("headerMobileSearchToggle");
+  const mobileSearchForm = document.getElementById("headerMobileSearchForm");
+  const mobileSearchInput = document.getElementById("headerMobileSearchInput");
+
+  mobileSearchToggle?.addEventListener("click", () => {
+    if (!mobileSearchForm) return;
+
+    const isHidden = mobileSearchForm.classList.contains("hidden");
+    mobileSearchForm.classList.toggle("hidden", !isHidden);
+
+    // focus when opening
+    if (isHidden) {
+      setTimeout(() => mobileSearchInput?.focus(), 0);
+    }
+  });
+
+  //  close menu after submitting
+  mobileSearchForm?.addEventListener("submit", () => {
+    if (mobileMenu && menuBtn) {
+      mobileMenu.classList.add("hidden");
+      mobileMenu.hidden = true;
+      menuBtn.setAttribute("aria-expanded", "false");
+    }
+  });
+
 }
