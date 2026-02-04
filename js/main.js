@@ -77,6 +77,10 @@ async function loadBrowseListings() {
   const sortSelectEl = document.getElementById("sortSelect");
   const activeOnlyEl = document.getElementById("activeOnly");
 
+  // Search elements
+  const params = new URLSearchParams(window.location.search);
+  const initialQuery = params.get("q") || "";
+
   // Pagination elements
   const prevBtn = document.getElementById("pagePrev");
   const nextBtn = document.getElementById("pageNext");
@@ -102,7 +106,7 @@ async function loadBrowseListings() {
     if (nextBtn) nextBtn.disabled = Boolean(meta?.isLastPage);
   }
 
-  // Disable pages when we show all search results on one page
+  // Disable pages when all search results shown on one page
   function disablePaginationForSearch(shownCount, totalCount) {
     if (pageInfoEl)
       pageInfoEl.textContent = `Showing ${shownCount} of ${totalCount}`;
@@ -172,7 +176,11 @@ async function loadBrowseListings() {
   }
 
   // Initial load
-  await run("");
+if (searchInput) {
+  searchInput.value = initialQuery;
+}
+await run(initialQuery);
+
 
   // Search submit -> reset to page 1
   if (searchForm && searchInput) {
@@ -250,5 +258,4 @@ window.addEventListener("DOMContentLoaded", () => {
   if (isRegisterPage()) initRegisterForm();
   if (isProfilePage()) initProfilePage();
   if (isCreatePage()) initCreateListingPage();
-
 });

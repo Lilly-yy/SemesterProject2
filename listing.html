@@ -29,9 +29,10 @@
     class="flex min-h-screen flex-col bg-emerald-50 text-slate-900"
   >
     <!-- HEADER -->
-    <header class="bg-emerald-950 text-white">
+    <header class="bg-emerald-950 text-emerald-950">
       <div class="mx-auto max-w-6xl px-4 py-3">
         <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
+          <!-- Logo -->
           <a href="index.html" class="flex shrink-0 items-center gap-2">
             <img
               src="assets/icons/logo.png"
@@ -45,41 +46,54 @@
             </span>
           </a>
 
+          <!-- Desktop: Browse -->
           <a
             href="browse.html"
-            aria-current="page"
-            class="order-3 w-full rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300 sm:order-none sm:w-auto"
+            class="hidden rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300 sm:inline-flex"
           >
             Browse Auctions
           </a>
 
+          <!-- Desktop: Create listing (+) -->
+          <a
+            id="headerCreateListingLink"
+            href="create-listing.html"
+            class="hidden sm:inline-flex items-center justify-center rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300"
+            aria-label="Create listing"
+            title="Create listing"
+          >
+            +
+          </a>
+
+          <!-- Desktop: Search -->
           <form
             role="search"
-            action="#"
-            class="order-4 flex w-full items-center gap-2 sm:order-none sm:ml-auto sm:w-full sm:max-w-md"
+            action="browse.html"
+            method="get"
+            class="hidden w-full items-center gap-2 sm:ml-auto sm:flex sm:w-full sm:max-w-md"
           >
             <label for="search" class="sr-only">Search auctions</label>
             <input
               id="search"
+              name="q"
               type="search"
               placeholder="Search auctions…"
-              class="w-full rounded-md bg-white px-3 py-2 text-sm text-emerald-950 placeholder:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
+              class="w-full rounded-md bg-white px-3 py-2 text-sm placeholder:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
             />
             <button
               type="submit"
-              class="shrink-0 rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
+              class="shrink-0 rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300"
             >
               Search
             </button>
           </form>
 
-          <div
-            class="order-2 ml-auto flex items-center gap-2 sm:order-none sm:ml-0"
-          >
+          <!-- Right side -->
+          <div class="ml-auto flex items-center gap-2 sm:ml-0">
             <a
               id="headerLoginLink"
               href="login.html"
-              class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900"
+              class="hidden sm:inline-flex rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300"
             >
               <span class="hidden sm:inline">Login / Sign up</span>
             </a>
@@ -87,7 +101,7 @@
             <button
               id="headerLogoutBtn"
               type="button"
-              class="hidden rounded-md px-3 py-2 text-sm font-semibold hover:bg-emerald-900"
+              class="hidden sm:inline-flex rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300"
             >
               <span class="hidden sm:inline">Logout</span>
             </button>
@@ -95,7 +109,7 @@
             <a
               id="headerProfileLink"
               href="profile.html"
-              class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-amber-400 text-emerald-950 text-lg leading-none hover:bg-amber-300"
+              class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-amber-400 text-lg leading-none hover:bg-amber-300"
               aria-label="Profile"
             >
               <img
@@ -106,9 +120,74 @@
               />
               <span id="headerAvatarFallback" aria-hidden="true">👤</span>
             </a>
+
+            <!-- Mobile: Menu button -->
+            <button
+              id="headerMenuBtn"
+              type="button"
+              class="inline-flex items-center justify-center rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300 sm:hidden"
+              aria-expanded="false"
+              aria-controls="headerMobileMenu"
+            >
+              ☰
+            </button>
           </div>
         </div>
       </div>
+
+      <!-- Mobile menu  -->
+      <nav
+        id="headerMobileMenu"
+        class="hidden border-t border-emerald-900 bg-emerald-950 sm:hidden"
+      >
+        <div class="mx-auto max-w-6xl px-4 py-4 space-y-3">
+          <a
+            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            href="browse.html"
+          >
+            Browse auctions
+          </a>
+
+          <a
+            id="headerMobileCreateLink"
+            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            href="create-listing.html"
+          >
+            + Create listing
+          </a>
+
+          <a
+            href="browse.html"
+            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+          >
+            Search auctions
+          </a>
+
+          <a
+            id="headerMobileProfileLink"
+            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            href="profile.html"
+          >
+            Profile
+          </a>
+
+          <a
+            id="headerMobileLoginLink"
+            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            href="login.html"
+          >
+            Login / Sign up
+          </a>
+
+          <button
+            id="headerMobileLogoutBtn"
+            type="button"
+            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+          >
+            Logout
+          </button>
+        </div>
+      </nav>
     </header>
 
     <!-- MAIN -->
