@@ -11,7 +11,7 @@ export async function getBidsByProfile(name, { limit = 100, page = 1 } = {}) {
   const url = new URL(`${API_BASE_URL}/auction/profiles/${name}/bids`);
   url.searchParams.set("limit", String(limit));
   url.searchParams.set("page", String(page));
-  url.searchParams.set("_listings", "true"); 
+  url.searchParams.set("_listings", "true");
 
   const payload = await fetchAuthJson(url.toString(), accessToken);
   const bids = Array.isArray(payload?.data) ? payload.data : [];

@@ -96,8 +96,10 @@ export function initHeader() {
     });
   }
 
-    // Mobile: search 
-  const mobileSearchToggle = document.getElementById("headerMobileSearchToggle");
+  // Mobile: search
+  const mobileSearchToggle = document.getElementById(
+    "headerMobileSearchToggle",
+  );
   const mobileSearchForm = document.getElementById("headerMobileSearchForm");
   const mobileSearchInput = document.getElementById("headerMobileSearchInput");
 
@@ -121,5 +123,4 @@ export function initHeader() {
       menuBtn.setAttribute("aria-expanded", "false");
     }
   });
-
 }

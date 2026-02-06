@@ -16,9 +16,23 @@ function formatEnds(endsAt) {
   });
 }
 
+function formatUserName(name) {
+  return (name || "").trim().toLowerCase();
+}
+
 function getHighestBid(bids = []) {
   if (!Array.isArray(bids) || bids.length === 0) return 0;
   return Math.max(...bids.map((b) => Number(b.amount || 0)));
+}
+
+function getHighestBidderName(bids = []) {
+  if (!Array.isArray(bids) || bids.length === 0) return null;
+
+  const top = [...bids].sort(
+    (a, b) => Number(b.amount || 0) - Number(a.amount || 0),
+  )[0];
+
+  return top?.bidder?.name || top?.bidderName || null;
 }
 
 function getMediaArray(listing) {
@@ -173,17 +187,48 @@ export async function renderSingleListing(listing) {
   const bidAmountInput = document.getElementById("bidAmount");
   const bidStatus = document.getElementById("bidStatus");
   const creditsInfo = document.getElementById("creditsInfo");
-  const auth = getAuth();
+  const highestNotice = document.getElementById("highestBidderNotice");
+  const bidButton = bidForm?.querySelector('button[type="submit"]');
+  const outbidNotice = document.getElementById("outbidNotice");
 
-  // If ended -> hide bidding
+  const auth = getAuth();
+  const viewerName = formatUserName(auth?.name);
+  let highestBidderName = formatUserName(getHighestBidderName(bids));
+  let isHighestBidder = Boolean(
+    viewerName && highestBidderName && viewerName === highestBidderName,
+  );
+
+  const viewerHasBid = bids.some((b) => {
+    const name = formatUserName(b.bidder?.name || b.bidderName);
+    return name && name === viewerName;
+  });
+
   if (ended) {
     setEndedState(true);
-
     loginBox?.classList.add("hidden");
     bidForm?.classList.add("hidden");
-
     contentEl?.classList.remove("hidden");
     return;
+  }
+
+  const isOutbid = Boolean(
+    isLoggedIn() &&
+    viewerHasBid &&
+    viewerName &&
+    highestBidderName &&
+    viewerName !== highestBidderName,
+  );
+
+  if (outbidNotice) {
+    if (isOutbid) {
+      outbidNotice.textContent = "You’ve been outbid.";
+      outbidNotice.classList.remove("hidden");
+      outbidNotice.removeAttribute("hidden");
+    } else {
+      outbidNotice.textContent = "";
+      outbidNotice.classList.add("hidden");
+      outbidNotice.setAttribute("hidden", "");
+    }
   }
 
   setEndedState(false);
@@ -191,12 +236,29 @@ export async function renderSingleListing(listing) {
   loginBox?.classList.toggle("hidden", isLoggedIn());
   bidForm?.classList.toggle("hidden", !isLoggedIn());
 
-  // Not ended -> normal login/bid visibility
-  if (loginBox) {
-    loginBox.classList.toggle("hidden", isLoggedIn());
-  }
-  if (bidForm) {
-    bidForm.classList.toggle("hidden", !isLoggedIn());
+  const sellerName = formatUserName(listing?.seller?.name);
+  const isOwner = Boolean(
+    viewerName && sellerName && viewerName === sellerName,
+  );
+
+  if (isOwner) {
+    loginBox?.classList.add("hidden");
+    bidForm?.classList.add("hidden");
+
+    const ownerNoticeId = "ownerBidNotice";
+    let ownerNotice = document.getElementById(ownerNoticeId);
+
+    if (!ownerNotice) {
+      ownerNotice = document.createElement("div");
+      ownerNotice.id = ownerNoticeId;
+      ownerNotice.className =
+        "mt-4 rounded-md bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 ring-1 ring-amber-200";
+      ownerNotice.textContent = "You can’t bid on your own listing.";
+      bidForm?.insertAdjacentElement("beforebegin", ownerNotice);
+    }
+
+    contentEl?.classList.remove("hidden");
+    return;
   }
 
   // Load credits if logged in
@@ -219,6 +281,34 @@ export async function renderSingleListing(listing) {
     }
   }
 
+  function applyHighestBidderState() {
+    if (!isLoggedIn() || !bidForm) return;
+
+    if (isHighestBidder) {
+      bidAmountInput?.setAttribute("disabled", "true");
+      bidButton?.setAttribute("disabled", "true");
+      bidButton?.classList.add("opacity-50", "cursor-not-allowed");
+
+      if (highestNotice) {
+        highestNotice.textContent = "You already have the highest bid.";
+        highestNotice.classList.remove("hidden");
+        highestNotice.removeAttribute("hidden");
+      }
+    } else {
+      bidAmountInput?.removeAttribute("disabled");
+      bidButton?.removeAttribute("disabled");
+      bidButton?.classList.remove("opacity-50", "cursor-not-allowed");
+
+      if (highestNotice) {
+        highestNotice.textContent = "";
+        highestNotice.classList.add("hidden");
+        highestNotice.setAttribute("hidden", "");
+      }
+    }
+  }
+
+  applyHighestBidderState();
+
   // Bind bid submit once
   if (bidForm && bidAmountInput && bidStatus && auth?.accessToken) {
     if (!bidForm.dataset.bound) {
@@ -226,6 +316,12 @@ export async function renderSingleListing(listing) {
 
       bidForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        // failsafe
+        if (isHighestBidder) {
+          bidStatus.textContent = "You already have the highest bid.";
+          return;
+        }
 
         const amount = Number(bidAmountInput.value);
 
@@ -239,7 +335,6 @@ export async function renderSingleListing(listing) {
           return;
         }
 
-        // Credits validation
         if (credits !== null && amount > credits) {
           bidStatus.textContent = `You don't have enough credits. Available: ${credits}.`;
           return;
@@ -265,6 +360,10 @@ export async function renderSingleListing(listing) {
           highest = getHighestBid(bids);
           if (currentBidEl) currentBidEl.textContent = String(highest);
           renderBids();
+
+          highestBidderName = formatUserName(auth?.name);
+          isHighestBidder = true;
+          applyHighestBidderState();
 
           bidAmountInput.value = "";
 

@@ -47,7 +47,6 @@ async function loadMyWins(profileName) {
   }
 }
 
-
 async function loadMyListings(profileName) {
   const statusEl = document.getElementById("myListingsStatus");
   const gridEl = document.getElementById("myListingsGrid");
@@ -77,7 +76,6 @@ async function loadMyListings(profileName) {
     gridEl.innerHTML = "";
   }
 }
-
 
 function buildUniqueBidListings(bids = []) {
   // Builds a unique list of listings you've bid on, keeping your highest bid per listing
@@ -120,7 +118,10 @@ async function loadMyBidListings(profileName) {
     const sortedListings = sortListingsUtil(decorated, "endingSoon");
 
     const order = new Map(sortedListings.map((l, idx) => [l.id, idx]));
-    unique.sort((a, b) => (order.get(a.listing.id) ?? 99999) - (order.get(b.listing.id) ?? 99999));
+    unique.sort(
+      (a, b) =>
+        (order.get(a.listing.id) ?? 99999) - (order.get(b.listing.id) ?? 99999),
+    );
 
     setText(statusEl, "");
     renderBidListings(gridEl, unique);
@@ -178,7 +179,6 @@ export async function initProfilePage() {
     await loadMyWins(profile.name || auth.name);
     await loadMyListings(profile.name || auth.name);
     await loadMyBidListings(profile.name || auth.name);
-    
   } catch (err) {
     setText(statusEl, `Could not load profile: ${err.message}`);
   }
@@ -223,5 +223,14 @@ export async function initProfilePage() {
         avatarStatusEl.textContent = `Avatar update failed: ${err.message}`;
       }
     });
+  }
+
+  // Scroll to anchor
+  const hash = window.location.hash;
+  if (hash) {
+    const target = document.querySelector(hash);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 }

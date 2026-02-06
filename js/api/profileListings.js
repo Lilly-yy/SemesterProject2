@@ -2,7 +2,10 @@ import { API_BASE_URL } from "./config.js";
 import { fetchAuthJson } from "./http.js";
 import { getAuth } from "../utils/storage.js";
 
-export async function getListingsByProfile(name, { limit = 50, page = 1 } = {}) {
+export async function getListingsByProfile(
+  name,
+  { limit = 50, page = 1 } = {},
+) {
   const auth = getAuth();
   const accessToken = auth?.accessToken;
 
@@ -11,7 +14,7 @@ export async function getListingsByProfile(name, { limit = 50, page = 1 } = {}) 
   const url = new URL(`${API_BASE_URL}/auction/profiles/${name}/listings`);
   url.searchParams.set("limit", String(limit));
   url.searchParams.set("page", String(page));
-  url.searchParams.set("_bids", "true"); 
+  url.searchParams.set("_bids", "true");
 
   const payload = await fetchAuthJson(url.toString(), accessToken);
   const listings = Array.isArray(payload?.data) ? payload.data : [];

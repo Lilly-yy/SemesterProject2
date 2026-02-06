@@ -1,7 +1,12 @@
 import { API_BASE_URL } from "./config.js";
 import { fetchJson } from "./http.js";
 
-export async function searchListings({ q, limit = 50, page = 1, activeOnly = false } = {}) {
+export async function searchListings({
+  q,
+  limit = 50,
+  page = 1,
+  activeOnly = false,
+} = {}) {
   const url = new URL(`${API_BASE_URL}/auction/listings/search`);
   url.searchParams.set("q", q);
   url.searchParams.set("limit", String(limit));
@@ -35,6 +40,9 @@ export async function searchListingsAll({
     page += 1;
   }
 
-  return { listings: all.slice(0, maxItems), meta, truncated: all.length > maxItems };
+  return {
+    listings: all.slice(0, maxItems),
+    meta,
+    truncated: all.length > maxItems,
+  };
 }
-

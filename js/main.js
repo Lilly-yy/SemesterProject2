@@ -1,3 +1,5 @@
+import { getAuth } from "./utils/storage.js";
+import { initHeroBtn } from "./ui/heroBtn.js";
 import { getListings } from "./api/listings.js";
 import { renderListings } from "./ui/renderListings.js";
 import { getListingById } from "./api/singleListing.js";
@@ -44,20 +46,26 @@ function isCreatePage() {
 async function loadHomeListings() {
   const statusEl = document.getElementById("listingsStatus");
   const gridEl = document.getElementById("listingsGrid");
+  const countEl = document.getElementById("activeAuctionsCount");
   if (!statusEl || !gridEl) return;
 
   try {
     statusEl.textContent = "Loading listings…";
 
-    const { listings } = await getListings({ limit: 50, activeOnly: true });
+    const { listings, meta } = await getListings({
+      limit: 50,
+      activeOnly: true,
+    });
 
     const decorated = decorateListings(listings);
+
     const filtered = filterListings(decorated, { activeOnly: true });
+
     const sorted = sortListingsUtil(filtered, "endingSoon");
     const top12 = sorted.slice(0, 12);
 
-    const countEl = document.getElementById("activeAuctionsCount");
-    if (countEl) countEl.textContent = String(filtered.length);
+    if (countEl)
+      countEl.textContent = String(meta?.totalCount ?? filtered.length);
 
     statusEl.textContent = "";
     renderListings(gridEl, top12);
@@ -176,11 +184,10 @@ async function loadBrowseListings() {
   }
 
   // Initial load
-if (searchInput) {
-  searchInput.value = initialQuery;
-}
-await run(initialQuery);
-
+  if (searchInput) {
+    searchInput.value = initialQuery;
+  }
+  await run(initialQuery);
 
   // Search submit -> reset to page 1
   if (searchForm && searchInput) {
@@ -251,7 +258,11 @@ async function loadSingleListing() {
 window.addEventListener("DOMContentLoaded", () => {
   initHeader();
 
-  if (isHomePage()) loadHomeListings();
+  if (isHomePage()) {
+    initHeroBtn();
+    loadHomeListings();
+  }
+
   if (isBrowsePage()) loadBrowseListings();
   if (isListingPage()) loadSingleListing();
   if (isLoginPage()) initLoginForm();
