@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/input.css" />
     <link rel="icon" href="assets/icons/favicon.ico" />
     <link
       rel="icon"
@@ -25,10 +25,10 @@
   </head>
   <body
     data-page="profile"
-    class="flex min-h-screen flex-col bg-emerald-50 text-slate-900 font-sans"
+    class="flex min-h-screen flex-col bg-brand-light text-brand font-sans"
   >
     <!-- HEADER -->
-    <header class="bg-emerald-950 text-emerald-950">
+    <header class="bg-brand text-brand">
       <div class="mx-auto max-w-6xl px-4 py-3">
         <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
           <!-- Logo -->
@@ -39,7 +39,7 @@
               class="h-16 w-14 shrink-0"
             />
             <span
-              class="hidden text-sm font-semibold tracking-wide text-amber-400 sm:inline"
+              class="hidden text-sm font-semibold tracking-wide text-accent sm:inline"
             >
               THE GOLDEN BID
             </span>
@@ -48,7 +48,7 @@
           <!-- Desktop: Browse -->
           <a
             href="browse.html"
-            class="hidden rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300 sm:inline-flex"
+            class="hidden rounded-md bg-accent px-3 py-2 text-sm font-semibold hover:bg-accent-light sm:inline-flex"
           >
             Browse Auctions
           </a>
@@ -57,7 +57,7 @@
           <a
             id="headerCreateListingLink"
             href="create-listing.html"
-            class="hidden sm:inline-flex items-center justify-center rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300"
+            class="hidden sm:inline-flex items-center justify-center rounded-md bg-accent px-3 py-2 text-sm font-semibold hover:bg-accent-light"
             aria-label="Create listing"
             title="Create listing"
           >
@@ -77,11 +77,11 @@
               name="q"
               type="search"
               placeholder="Search auctions…"
-              class="w-full rounded-md bg-white px-3 py-2 text-sm placeholder:text-emerald-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
+              class="w-full rounded-md bg-white px-3 py-2 text-sm placeholder:text-brand focus:outline-none focus:ring-2 focus:ring-accent"
             />
             <button
               type="submit"
-              class="shrink-0 rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300"
+              class="shrink-0 rounded-md bg-accent px-3 py-2 text-sm font-semibold hover:bg-accent-light"
             >
               Search
             </button>
@@ -92,7 +92,7 @@
             <a
               id="headerLoginLink"
               href="login.html"
-              class="hidden sm:inline-flex rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300"
+              class="hidden sm:inline-flex rounded-md bg-accent px-3 py-2 text-sm font-semibold hover:bg-accent-light"
             >
               <span class="hidden sm:inline">Login / Sign up</span>
             </a>
@@ -100,7 +100,7 @@
             <button
               id="headerLogoutBtn"
               type="button"
-              class="hidden sm:inline-flex rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300"
+              class="hidden sm:inline-flex rounded-md bg-accent px-3 py-2 text-sm font-semibold hover:bg-accent-light"
             >
               <span class="hidden sm:inline">Logout</span>
             </button>
@@ -108,7 +108,7 @@
             <a
               id="headerProfileLink"
               href="profile.html"
-              class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-amber-400 text-lg leading-none hover:bg-amber-300"
+              class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-accent text-lg leading-none hover:bg-accent-light"
               aria-label="Profile"
             >
               <img
@@ -124,7 +124,7 @@
             <button
               id="headerMenuBtn"
               type="button"
-              class="inline-flex items-center justify-center rounded-md bg-amber-400 px-3 py-2 text-sm font-semibold hover:bg-amber-300 sm:hidden"
+              class="inline-flex items-center justify-center rounded-md bg-accent px-3 py-2 text-sm font-semibold hover:bg-accent-light sm:hidden"
               aria-expanded="false"
               aria-controls="headerMobileMenu"
             >
@@ -137,11 +137,11 @@
       <!-- Mobile menu  -->
       <nav
         id="headerMobileMenu"
-        class="hidden border-t border-emerald-900 bg-emerald-950 sm:hidden"
+        class="hidden border-t border-brand bg-brand sm:hidden"
       >
         <div class="mx-auto max-w-6xl px-4 py-4 space-y-3">
           <a
-            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            class="block w-full rounded-lg bg-accent px-4 py-3 text-base font-semibold text-center hover:bg-accent-light"
             href="browse.html"
           >
             Browse auctions
@@ -149,7 +149,7 @@
 
           <a
             id="headerMobileCreateLink"
-            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            class="block w-full rounded-lg bg-accent px-4 py-3 text-base font-semibold text-center hover:bg-accent-light"
             href="create-listing.html"
           >
             + Create listing
@@ -157,14 +157,14 @@
 
           <a
             href="browse.html"
-            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            class="block w-full rounded-lg bg-accent px-4 py-3 text-base font-semibold text-center hover:bg-accent-light"
           >
             Search auctions
           </a>
 
           <a
             id="headerMobileProfileLink"
-            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            class="block w-full rounded-lg bg-accent px-4 py-3 text-base font-semibold text-center hover:bg-accent-light"
             href="profile.html"
           >
             Profile
@@ -172,7 +172,7 @@
 
           <a
             id="headerMobileLoginLink"
-            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            class="block w-full rounded-lg bg-accent px-4 py-3 text-base font-semibold text-center hover:bg-accent-light"
             href="login.html"
           >
             Login / Sign up
@@ -181,7 +181,7 @@
           <button
             id="headerMobileLogoutBtn"
             type="button"
-            class="block w-full rounded-lg bg-amber-400 px-4 py-3 text-base font-semibold text-center hover:bg-amber-300"
+            class="block w-full rounded-lg bg-accent px-4 py-3 text-base font-semibold text-center hover:bg-accent-light"
           >
             Logout
           </button>
@@ -191,9 +191,9 @@
 
     <!-- MAIN -->
     <main class="mx-auto w-full max-w-3xl px-4 py-10">
-      <h1 class="text-3xl font-bold text-emerald-950">My Profile</h1>
+      <h1 class="text-3xl font-bold text-brand">My Profile</h1>
 
-      <p id="profileStatus" class="mt-2 text-sm text-slate-600"></p>
+      <p id="profileStatus" class="mt-2 text-sm text-brand"></p>
 
       <section
         id="profileCard"
@@ -203,29 +203,26 @@
           <img
             id="profileAvatar"
             alt="User avatar"
-            class="h-20 w-20 rounded-full object-cover ring-2 ring-amber-400"
+            class="h-20 w-20 rounded-full object-cover ring-2 ring-accent"
           />
 
           <div class="flex-1">
             <div
               id="profileName"
-              class="text-lg font-semibold text-emerald-950"
+              class="text-lg font-semibold text-brand"
             ></div>
-            <div id="profileEmail" class="text-sm text-slate-600"></div>
+            <div id="profileEmail" class="text-sm text-brand"></div>
 
             <div class="mt-2 text-sm">
               Credits remaining:
-              <span
-                id="profileCredits"
-                class="font-semibold text-emerald-900"
-              ></span>
+              <span id="profileCredits" class="font-semibold text-brand"></span>
             </div>
           </div>
 
           <button
             id="logoutBtn"
             type="button"
-            class="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-emerald-950 hover:bg-slate-200"
+            class="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-brand hover:bg-slate-200"
           >
             Logout
           </button>
@@ -237,7 +234,7 @@
           <div>
             <label
               for="avatarUrl"
-              class="block text-sm font-semibold text-emerald-950"
+              class="block text-sm font-semibold text-brand"
               >New avatar URL</label
             >
             <input
@@ -251,7 +248,7 @@
           <div>
             <label
               for="avatarAlt"
-              class="block text-sm font-semibold text-emerald-950"
+              class="block text-sm font-semibold text-brand"
               >Alt text (optional)</label
             >
             <input
@@ -264,52 +261,65 @@
 
           <button
             type="submit"
-            class="rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
+            class="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-brand hover:bg-accent-light"
           >
             Update avatar
           </button>
 
-          <p id="avatarStatus" class="text-sm text-slate-600"></p>
+          <p id="avatarStatus" class="text-sm text-brand"></p>
         </form>
       </section>
 
       <!-- MY WINS -->
       <section class="mt-12">
-        <h2 class="text-xl font-bold text-emerald-950">Auctions I won</h2>
-        <p class="mt-1 text-sm text-slate-600">Auctions you have won.</p>
+        <h2 class="text-xl font-bold text-brand">Auctions I won</h2>
+        <p class="mt-1 text-sm text-brand">Auctions you have won.</p>
 
-        <p id="winsStatus" class="mt-3 text-sm text-slate-600"></p>
+        <p id="winsStatus" class="mt-3 text-sm text-brand"></p>
 
         <div id="winsGrid" class="mt-6 grid gap-6 sm:grid-cols-2"></div>
       </section>
 
       <!-- MY LISTINGS -->
       <section class="mt-10">
-        <h2 class="text-xl font-bold text-emerald-950">My auctions</h2>
-        <p class="mt-1 text-sm text-slate-600">Auctions you have created.</p>
+        <h2 class="text-xl font-bold text-brand">My auctions</h2>
+        <p class="mt-1 text-sm text-brand">Auctions you have created.</p>
 
-        <p id="myListingsStatus" class="mt-3 text-sm text-slate-600"></p>
+        <p id="myListingsStatus" class="mt-3 text-sm text-brand"></p>
 
         <div id="myListingsGrid" class="mt-4 grid gap-6 sm:grid-cols-2"></div>
       </section>
 
       <!-- MY BIDS -->
       <section class="mt-10">
-        <h2 class="text-xl font-bold text-emerald-950">Auctions I’ve bid on</h2>
-        <p class="mt-1 text-sm text-slate-600">
+        <h2 class="text-xl font-bold text-brand">Auctions I’ve bid on</h2>
+        <p class="mt-1 text-sm text-brand">
           Auctions where you have placed bids.
         </p>
 
-        <p id="myBidsStatus" class="mt-3 text-sm text-slate-600"></p>
+        <p id="myBidsStatus" class="mt-3 text-sm text-brand"></p>
 
         <div id="myBidsGrid" class="mt-4 grid gap-6 sm:grid-cols-2"></div>
       </section>
     </main>
 
     <!-- FOOTER -->
-    <footer class="mt-auto bg-emerald-950 text-slate-300">
-      <div class="mx-auto max-w-6xl px-4 py-6 text-sm">
-        © 2026 The Golden Bid. Semester Project 2.
+    <footer class="mt-auto bg-brand text-accent text">
+      <div
+        class="mx-auto max-w-6xl px-4 py-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-between"
+      >
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2">
+          <img
+            src="assets/icons/logo.png"
+            alt="The Golden Bid logo"
+            class="h-12 w-10"
+          />
+          <span class="sr-only">The Golden Bid</span>
+        </a>
+
+        <!-- Copyright -->
+        <p>© 2026 The Golden Bid · Semester Project 2</p>
       </div>
     </footer>
   </body>

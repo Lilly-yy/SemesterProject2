@@ -1,6 +1,7 @@
 import { isLoggedIn, getAuth, saveAuth } from "../utils/storage.js";
 import { placeBid } from "../api/bids.js";
 import { getProfile } from "../api/profile.js";
+import { formatTimeLeft } from "../utils/time.js";
 
 function formatEnds(endsAt) {
   if (!endsAt) return "—";
@@ -30,6 +31,13 @@ function getMediaArray(listing) {
   return [];
 }
 
+function isAuctionEnded(listing) {
+  const endsAt = listing.endsAt || listing.deadline || listing.ends_at;
+  const t = new Date(endsAt).getTime();
+  if (!Number.isFinite(t)) return false;
+  return t <= Date.now();
+}
+
 export async function renderSingleListing(listing) {
   const contentEl = document.getElementById("listingContent");
   const titleEl = document.getElementById("listingTitle");
@@ -40,25 +48,62 @@ export async function renderSingleListing(listing) {
   const descEl = document.getElementById("listingDescription");
   const bidsEl = document.getElementById("bidsList");
 
+  // Countdown + ended
+  const timeLeftEl = document.getElementById("listingTimeLeft");
+  const endedNoticeEl = document.getElementById("listingEndedNotice");
+
   const title = listing.title || "Untitled listing";
-  const ends = formatEnds(
-    listing.endsAt || listing.deadline || listing.ends_at,
-  );
+  const endsAtRaw = listing.endsAt || listing.deadline || listing.ends_at;
+  const ends = formatEnds(endsAtRaw);
+
   const bids = Array.isArray(listing.bids) ? listing.bids : [];
   let highest = getHighestBid(bids);
+
   const media = getMediaArray(listing);
 
-  titleEl.textContent = title;
-  endsEl.textContent = ends;
-  currentBidEl.textContent = String(highest);
-  descEl.textContent = listing.description || "No description provided.";
+  // Auction status
+  const ended = isAuctionEnded(listing);
+  const timeLeftText = formatTimeLeft(endsAtRaw);
+
+  // Basic render
+  if (titleEl) titleEl.textContent = title;
+  if (endsEl) endsEl.textContent = ends;
+  if (currentBidEl) currentBidEl.textContent = String(highest);
+  if (descEl)
+    descEl.textContent = listing.description || "No description provided.";
+
+  // countdown
+  if (timeLeftEl) {
+    timeLeftEl.textContent = ended ? "" : `( ${timeLeftText})`;
+  }
+
+  function setEndedState(isEnded) {
+    if (!endedNoticeEl) return;
+
+    if (isEnded) {
+      endedNoticeEl.textContent = "Auction ended";
+      endedNoticeEl.classList.remove("hidden");
+      endedNoticeEl.removeAttribute("hidden");
+    } else {
+      endedNoticeEl.textContent = "";
+      endedNoticeEl.classList.add("hidden");
+      endedNoticeEl.setAttribute("hidden", "");
+    }
+  }
+
+  if (timeLeftEl) {
+    timeLeftEl.classList.toggle("text-rose-700", ended);
+    timeLeftEl.classList.toggle("font-semibold", ended);
+  }
+
+  setEndedState(ended);
 
   // Images
   const mainSrc = media[0] || "";
-  if (mainSrc) {
+  if (mainSrc && mainImgEl) {
     mainImgEl.src = mainSrc;
     mainImgEl.alt = title;
-  } else {
+  } else if (mainImgEl) {
     mainImgEl.removeAttribute("src");
     mainImgEl.alt = "No image";
     mainImgEl.className =
@@ -66,38 +111,40 @@ export async function renderSingleListing(listing) {
     mainImgEl.outerHTML = `<div id="listingMainImage" class="h-80 w-full bg-slate-100 flex items-center justify-center text-slate-500">No image</div>`;
   }
 
-  thumbsEl.innerHTML = "";
-  if (media.length > 1) {
-    thumbsEl.innerHTML = media
-      .slice(0, 6)
-      .map(
-        (src, i) => `
-        <button data-src="${src}" class="h-16 w-16 overflow-hidden rounded-lg bg-white ring-1 ring-slate-200 hover:ring-amber-400">
-          <img src="${src}" alt="${title} thumbnail ${i + 1}" class="h-full w-full object-cover" loading="lazy" />
-        </button>
-      `,
-      )
-      .join("");
+  if (thumbsEl) {
+    thumbsEl.innerHTML = "";
+    if (media.length > 1) {
+      thumbsEl.innerHTML = media
+        .slice(0, 6)
+        .map(
+          (src, i) => `
+          <button data-src="${src}" class="h-16 w-16 overflow-hidden rounded-lg bg-white ring-1 ring-slate-200 hover:ring-accent">
+            <img src="${src}" alt="${title} thumbnail ${i + 1}" class="h-full w-full object-cover" loading="lazy" />
+          </button>
+        `,
+        )
+        .join("");
 
-    thumbsEl.addEventListener("click", (e) => {
-      const btn = e.target.closest("button[data-src]");
-      if (!btn) return;
+      thumbsEl.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-src]");
+        if (!btn) return;
 
-      const src = btn.getAttribute("data-src");
-      const main = document.getElementById("listingMainImage");
-
-      if (main && main.tagName === "IMG") {
-        main.src = src;
-      }
-    });
+        const src = btn.getAttribute("data-src");
+        const main = document.getElementById("listingMainImage");
+        if (main && main.tagName === "IMG") {
+          main.src = src;
+        }
+      });
+    }
   }
 
   // Bids list
   function renderBids() {
+    if (!bidsEl) return;
     bidsEl.innerHTML = "";
 
     if (bids.length === 0) {
-      bidsEl.innerHTML = `<div class="p-4 text-slate-600">No bids yet.</div>`;
+      bidsEl.innerHTML = `<div class="p-4 text-brand">No bids yet.</div>`;
       return;
     }
 
@@ -110,7 +157,7 @@ export async function renderSingleListing(listing) {
         return `
           <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
             <span class="font-medium text-slate-800">${name}</span>
-            <span class="font-semibold text-emerald-900">${amount} credits</span>
+            <span class="font-semibold text-brand">${amount} credits</span>
           </div>
         `;
       });
@@ -122,21 +169,37 @@ export async function renderSingleListing(listing) {
 
   // Toggle login/bid UI
   const loginBox = document.getElementById("loginToBidBox");
-  if (loginBox) {
-    loginBox.classList.toggle("hidden", isLoggedIn());
-  }
-
   const bidForm = document.getElementById("bidForm");
   const bidAmountInput = document.getElementById("bidAmount");
   const bidStatus = document.getElementById("bidStatus");
   const creditsInfo = document.getElementById("creditsInfo");
   const auth = getAuth();
 
+  // If ended -> hide bidding
+  if (ended) {
+    setEndedState(true);
+
+    loginBox?.classList.add("hidden");
+    bidForm?.classList.add("hidden");
+
+    contentEl?.classList.remove("hidden");
+    return;
+  }
+
+  setEndedState(false);
+
+  loginBox?.classList.toggle("hidden", isLoggedIn());
+  bidForm?.classList.toggle("hidden", !isLoggedIn());
+
+  // Not ended -> normal login/bid visibility
+  if (loginBox) {
+    loginBox.classList.toggle("hidden", isLoggedIn());
+  }
   if (bidForm) {
     bidForm.classList.toggle("hidden", !isLoggedIn());
   }
 
-  // Load credits (only if logged in)
+  // Load credits if logged in
   let credits = null;
 
   if (isLoggedIn() && auth?.accessToken && auth?.name) {
@@ -200,7 +263,7 @@ export async function renderSingleListing(listing) {
           });
 
           highest = getHighestBid(bids);
-          currentBidEl.textContent = String(highest);
+          if (currentBidEl) currentBidEl.textContent = String(highest);
           renderBids();
 
           bidAmountInput.value = "";
@@ -223,5 +286,5 @@ export async function renderSingleListing(listing) {
     }
   }
 
-  contentEl.classList.remove("hidden");
+  contentEl?.classList.remove("hidden");
 }

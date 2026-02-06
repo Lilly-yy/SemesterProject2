@@ -26,7 +26,7 @@ export function renderListings(gridEl, listings) {
   gridEl.innerHTML = "";
 
   if (!listings || listings.length === 0) {
-    gridEl.innerHTML = `<p class="text-slate-600">No listings found.</p>`;
+    gridEl.innerHTML = `<p class="text-brand">No listings found.</p>`;
     return;
   }
 
@@ -51,12 +51,12 @@ export function renderListings(gridEl, listings) {
 
         <div class="p-4">
           <h2 class="text-lg font-semibold">${title}</h2>
-          <p class="mt-1 text-sm text-slate-600">Ends: ${ends}</p>
-          <p class="mt-2 font-semibold text-emerald-900">Current bid: ${highest} credits</p>
+          <p class="mt-1 text-sm text-brand">Ends: ${ends}</p>
+          <p class="mt-2 font-semibold text-brand">Current bid: ${highest} credits</p>
 
           <a
             href="listing.html?id=${encodeURIComponent(id)}"
-            class="mt-4 inline-block rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300"
+            class="mt-4 inline-block rounded-md bg-accent px-4 py-2 text-sm font-semibold text-brand hover:bg-accent-light"
           >
             View auction
           </a>

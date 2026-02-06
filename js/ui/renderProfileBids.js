@@ -2,11 +2,16 @@ function formatDate(value) {
   if (!value) return "—";
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" });
+  return d.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
 }
 
 function getFirstImage(media) {
-  if (Array.isArray(media) && media[0] && typeof media[0].url === "string") return media[0].url;
+  if (Array.isArray(media) && media[0] && typeof media[0].url === "string")
+    return media[0].url;
   return "";
 }
 
@@ -14,7 +19,7 @@ export function renderBidListings(gridEl, items) {
   gridEl.innerHTML = "";
 
   if (!items || items.length === 0) {
-    gridEl.innerHTML = `<p class="text-slate-600">No bids yet.</p>`;
+    gridEl.innerHTML = `<p class="text-brand">No bids yet.</p>`;
     return;
   }
 
@@ -37,13 +42,13 @@ export function renderBidListings(gridEl, items) {
 
           <div class="p-4">
             <h3 class="text-lg font-semibold">${title}</h3>
-            <p class="mt-1 text-sm text-slate-600">Ends: ${ends}</p>
-            <p class="mt-2 font-semibold text-emerald-900">Your max bid: ${myMaxBid} credits</p>
+            <p class="mt-1 text-sm text-brand">Ends: ${ends}</p>
+            <p class="mt-2 font-semibold text-brand">Your max bid: ${myMaxBid} credits</p>
 
             ${
               id
                 ? `<a href="listing.html?id=${encodeURIComponent(id)}"
-                     class="mt-4 inline-block rounded-md bg-amber-400 px-4 py-2 text-sm font-semibold text-emerald-950 hover:bg-amber-300">
+                     class="mt-4 inline-block rounded-md bg-accent px-4 py-2 text-sm font-semibold text-brand hover:bg-accent-light">
                      View auction
                    </a>`
                 : ""
