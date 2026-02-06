@@ -30,6 +30,140 @@ export function initCreateListingPage() {
 
   if (!form || !statusEl) return;
 
+  const addImageBtn = document.getElementById("addImageBtn");
+const imagesListEl = document.getElementById("imagesList");
+
+const images = []; // { url, alt }
+
+function renderImagesList() {
+  if (!imagesListEl) return;
+
+  if (images.length === 0) {
+    imagesListEl.innerHTML =
+      '<p class="text-sm text-slate-500">No images added yet.</p>';
+    return;
+  }
+
+  imagesListEl.innerHTML = images
+    .map(
+      (img, index) => `
+        <div class="flex items-center justify-between gap-3 rounded-md bg-slate-50 px-3 py-2 ring-1 ring-slate-200">
+          <div class="min-w-0">
+            <p class="truncate text-sm font-semibold text-slate-800">${img.alt}</p>
+            <p class="truncate text-xs text-slate-600">${img.url}</p>
+          </div>
+          <button
+            type="button"
+            data-remove-index="${index}"
+            class="shrink-0 rounded-md px-3 py-1 text-sm font-semibold text-rose-700 hover:bg-rose-50"
+          >
+            Remove
+          </button>
+        </div>
+      `,
+    )
+    .join("");
+}
+const imageUrlInput = document.getElementById("imageUrl");
+const imageAltInput = document.getElementById("imageAlt");
+
+
+function renderImagesList() {
+  if (!imagesListEl) return;
+
+  if (images.length === 0) {
+    imagesListEl.innerHTML =
+      '<p class="text-sm text-slate-500">No images added yet.</p>';
+    return;
+  }
+
+  imagesListEl.innerHTML = images
+    .map(
+      (img, index) => `
+        <div class="flex items-center justify-between gap-3 rounded-md bg-slate-50 px-3 py-2 ring-1 ring-slate-200">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="h-12 w-12 overflow-hidden rounded-md bg-white ring-1 ring-slate-200 shrink-0">
+              <img
+                src="${img.url}"
+                alt="${img.alt}"
+                class="h-full w-full object-cover"
+                loading="lazy"
+                onerror="this.style.display='none'; this.parentElement.textContent='No img'; this.parentElement.classList.add('flex','items-center','justify-center','text-xs','text-slate-500');"
+              />
+            </div>
+
+            <div class="min-w-0">
+              <p class="truncate text-sm font-semibold text-slate-800">${img.alt}</p>
+              <p class="truncate text-xs text-slate-600">${img.url}</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            data-remove-index="${index}"
+            class="shrink-0 rounded-md px-3 py-1 text-sm font-semibold text-rose-700 hover:bg-rose-50"
+          >
+            Remove
+          </button>
+        </div>
+      `,
+    )
+    .join("");
+}
+
+
+addImageBtn?.addEventListener("click", () => {
+  statusEl.textContent = "";
+
+const url = imageUrlInput?.value.trim() || "";
+const alt = imageAltInput?.value.trim() || "Listing image";
+
+
+  if (!url) {
+    statusEl.textContent = "Please enter an image URL.";
+    return;
+  }
+
+  if (!isValidUrl(url)) {
+    statusEl.textContent = "Image URL must be a valid http/https URL.";
+    return;
+  }
+
+  // max 6
+  if (images.length >= 6) {
+    statusEl.textContent = "You can add up to 6 images.";
+    return;
+  }
+
+  // avoid duplicates
+  const exists = images.some((img) => img.url === url);
+  if (exists) {
+    statusEl.textContent = "That image URL has already been added.";
+    return;
+  }
+
+  images.push({ url, alt });
+  renderImagesList();
+
+if (imageUrlInput) {
+  imageUrlInput.value = "";
+  imageUrlInput.focus();
+}
+
+});
+
+imagesListEl?.addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-remove-index]");
+  if (!btn) return;
+
+  const index = Number(btn.getAttribute("data-remove-index"));
+  if (!Number.isFinite(index)) return;
+
+  images.splice(index, 1);
+  renderImagesList();
+});
+
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -40,8 +174,8 @@ export function initCreateListingPage() {
     const endsAtLocal = form.endsAt.value;
     const tagsRaw = form.tags.value.trim();
 
-    const imgUrl = form.imageUrl.value.trim();
-    const imgAlt = form.imageAlt.value.trim();
+const media = images.length ? images : [];
+
 
     if (!title) {
       statusEl.textContent = "Title is required.";
@@ -60,14 +194,6 @@ export function initCreateListingPage() {
 
     const tags = tagsRaw ? parseTags(tagsRaw) : [];
 
-    const media = [];
-    if (imgUrl) {
-      if (!isValidUrl(imgUrl)) {
-        statusEl.textContent = "Image URL must be a valid http/https URL.";
-        return;
-      }
-      media.push({ url: imgUrl, alt: imgAlt || "Listing image" });
-    }
 
     try {
       statusEl.textContent = "Creating listing…";
