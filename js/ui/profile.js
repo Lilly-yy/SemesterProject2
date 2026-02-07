@@ -36,7 +36,6 @@ async function loadMyWins(profileName) {
     }
 
     const decorated = decorateListings(listings);
-
     const sorted = sortListingsUtil(decorated, "newest");
 
     statusEl.textContent = "";
@@ -78,7 +77,6 @@ async function loadMyListings(profileName) {
 }
 
 function buildUniqueBidListings(bids = []) {
-  // Builds a unique list of listings you've bid on, keeping your highest bid per listing
   const map = new Map();
 
   for (const b of bids) {
@@ -170,7 +168,11 @@ export async function initProfilePage() {
       avatarEl.alt = profile.avatar?.alt || "User avatar";
     }
 
-    saveAuth({ ...auth, credits: profile.credits });
+    saveAuth({
+      ...auth,
+      credits: profile.credits,
+      avatar: profile.avatar ?? auth.avatar,
+    });
 
     setText(statusEl, "");
     if (cardEl) cardEl.classList.remove("hidden");
@@ -211,9 +213,22 @@ export async function initProfilePage() {
           avatar: { url, alt },
         });
 
+        const nextAvatar = updated?.avatar ?? { url, alt };
+
         if (avatarEl) {
-          avatarEl.src = updated.avatar?.url || url;
-          avatarEl.alt = updated.avatar?.alt || alt || "User avatar";
+          avatarEl.src = nextAvatar.url;
+          avatarEl.alt = nextAvatar.alt || "User avatar";
+        }
+
+        saveAuth({ ...getAuth(), avatar: nextAvatar });
+
+        const headerImg = document.getElementById("headerAvatar");
+        const headerFallback = document.getElementById("headerAvatarFallback");
+        if (headerImg && headerFallback) {
+          headerImg.src = nextAvatar.url;
+          headerImg.alt = nextAvatar.alt || "Profile avatar";
+          headerImg.classList.remove("hidden");
+          headerFallback.classList.add("hidden");
         }
 
         avatarStatusEl.textContent = "Avatar updated!";
