@@ -16,6 +16,12 @@ function setText(el, text) {
   if (el) el.textContent = text;
 }
 
+function cacheBust(url) {
+  if (!url) return "";
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}v=${Date.now()}`;
+}
+
 async function loadMyWins(profileName) {
   const statusEl = document.getElementById("winsStatus");
   const gridEl = document.getElementById("winsGrid");
@@ -110,7 +116,6 @@ async function loadMyBidListings(profileName) {
 
     const unique = buildUniqueBidListings(bids);
 
-    // Sort by endingSoon using the same decorate/sort logic (based on listing.endsAt)
     const listingOnly = unique.map((x) => x.listing);
     const decorated = decorateListings(listingOnly);
     const sortedListings = sortListingsUtil(decorated, "endingSoon");
@@ -162,16 +167,18 @@ export async function initProfilePage() {
     setText(emailEl, profile.email || auth.email || "");
     setText(creditsEl, String(profile.credits ?? 0));
 
-    const avatarUrl = profile.avatar?.url || "";
+    const avatarObj = profile.avatar || auth.avatar || null;
+    const avatarUrl = avatarObj?.url || "";
+
     if (avatarEl) {
-      avatarEl.src = avatarUrl || "";
-      avatarEl.alt = profile.avatar?.alt || "User avatar";
+      avatarEl.src = avatarUrl ? cacheBust(avatarUrl) : "";
+      avatarEl.alt = avatarObj?.alt || "User avatar";
     }
 
     saveAuth({
       ...auth,
       credits: profile.credits,
-      avatar: profile.avatar ?? auth.avatar,
+      avatar: avatarObj || undefined,
     });
 
     setText(statusEl, "");
@@ -207,25 +214,30 @@ export async function initProfilePage() {
       try {
         avatarStatusEl.textContent = "Updating avatar…";
 
+        const freshAuth = getAuth();
+
         const updated = await updateAvatar({
-          name: auth.name,
-          accessToken: auth.accessToken,
+          name: freshAuth.name,
+          accessToken: freshAuth.accessToken,
           avatar: { url, alt },
         });
 
         const nextAvatar = updated?.avatar ?? { url, alt };
 
         if (avatarEl) {
-          avatarEl.src = nextAvatar.url;
+          avatarEl.src = cacheBust(nextAvatar.url);
           avatarEl.alt = nextAvatar.alt || "User avatar";
         }
 
-        saveAuth({ ...getAuth(), avatar: nextAvatar });
+        saveAuth({
+          ...freshAuth,
+          avatar: nextAvatar,
+        });
 
         const headerImg = document.getElementById("headerAvatar");
         const headerFallback = document.getElementById("headerAvatarFallback");
         if (headerImg && headerFallback) {
-          headerImg.src = nextAvatar.url;
+          headerImg.src = cacheBust(nextAvatar.url);
           headerImg.alt = nextAvatar.alt || "Profile avatar";
           headerImg.classList.remove("hidden");
           headerFallback.classList.add("hidden");
