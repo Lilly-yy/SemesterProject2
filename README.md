@@ -1,9 +1,11 @@
 # Semester Project 2 – The Golden Bid
 
+![Screenshot from site](/assets/images/Screenshot%202026-02-07%20102534.png)
+
 ## Description
 
 **The Golden Bid** is a front-end auction website built as part of Semester Project 2.  
-The project lets users register, create auction listings, and place bids using credits, while non-registered users can browse and search active auctions.
+The project lets users register, create auction listings, and place bids using credits, while non-registered users may browse and search active auctions.
 
 ## Goal
 
@@ -30,17 +32,15 @@ The goal is to apply the skills learned over the past three semesters to create 
 
 ## Planning & Design
 
-- **Gantt Chart:** REMEMBER – add link
-- **Design Prototype (Figma):** REMEMBER – add link
-- **Style Guide:** REMEMBER – add link
-- **Kanban Board:** REMEMBER – add link
+- **Gantt Chart:** For planning
+- **Design Prototype (Figma):** For designing
+- **Kanban Board:** For project management
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js (v18 or later recommended)
-- A Noroff API key
 
 ### Installation
 
@@ -58,15 +58,14 @@ The goal is to apply the skills learned over the past three semesters to create 
 
 ## Environment Variables
 
-This project uses environment variables to store the API key securely.
+This project uses environment variables for configuration.
 
-Create a .env file in the root of the project and add:
+Create a `.env` file in the root of the project if required by your setup.
 
 ```env
-VITE_API_KEY=your_noroff_api_key_here
+VITE_API_BASE_URL=https://api.noroff.dev/api/v2
 ```
 
-⚠️ The `.env` file should not be committed to GitHub.
 
 ## Running the Project Locally
 
