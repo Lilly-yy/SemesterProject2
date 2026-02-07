@@ -1,4 +1,4 @@
-import { API_BASE_URL, getAuthHeaders } from "./config.js";
+import { getAuthHeaders } from "./config.js";
 
 export async function fetchJson(url, options = {}) {
   const headers = getAuthHeaders(options.headers);

@@ -31,7 +31,7 @@ async function loadMyWins(profileName) {
 
     if (!listings.length) {
       statusEl.textContent = "No wins yet.";
-      gridEl.innerHTML = "";
+      gridEl.replaceChildren();
       return;
     }
 
@@ -43,7 +43,7 @@ async function loadMyWins(profileName) {
     renderListings(gridEl, sorted);
   } catch (err) {
     statusEl.textContent = `Could not load wins: ${err.message}`;
-    gridEl.innerHTML = "";
+    gridEl.replaceChildren();
   }
 }
 
@@ -62,7 +62,7 @@ async function loadMyListings(profileName) {
 
     if (!listings.length) {
       setText(statusEl, "You haven’t created any auctions yet.");
-      gridEl.innerHTML = "";
+      gridEl.replaceChildren();
       return;
     }
 
@@ -73,7 +73,7 @@ async function loadMyListings(profileName) {
     renderListings(gridEl, sorted);
   } catch (err) {
     setText(statusEl, `Could not load your auctions: ${err.message}`);
-    gridEl.innerHTML = "";
+    gridEl.replaceChildren();
   }
 }
 
@@ -127,7 +127,7 @@ async function loadMyBidListings(profileName) {
     renderBidListings(gridEl, unique);
   } catch (err) {
     setText(statusEl, `Could not load your bids: ${err.message}`);
-    gridEl.innerHTML = "";
+    gridEl.replaceChildren();
   }
 }
 
@@ -166,7 +166,7 @@ export async function initProfilePage() {
 
     const avatarUrl = profile.avatar?.url || "";
     if (avatarEl) {
-      avatarEl.src = avatarUrl || "assets/icons/logo.png";
+      avatarEl.src = avatarUrl || "";
       avatarEl.alt = profile.avatar?.alt || "User avatar";
     }
 
@@ -186,7 +186,7 @@ export async function initProfilePage() {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       clearAuth();
-      window.location.href = "index.html";
+      window.location.href = "/";
     });
   }
 

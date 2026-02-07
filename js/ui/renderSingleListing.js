@@ -114,30 +114,42 @@ export async function renderSingleListing(listing) {
 
   // Images
   const mainSrc = media[0] || "";
-  if (mainSrc && mainImgEl) {
-    mainImgEl.src = mainSrc;
-    mainImgEl.alt = title;
-  } else if (mainImgEl) {
-    mainImgEl.removeAttribute("src");
-    mainImgEl.alt = "No image";
-    mainImgEl.className =
-      "h-80 w-full bg-slate-100 flex items-center justify-center text-slate-500";
-    mainImgEl.outerHTML = `<div id="listingMainImage" class="h-80 w-full bg-slate-100 flex items-center justify-center text-slate-500">No image</div>`;
+
+  if (mainImgEl) {
+    if (mainSrc) {
+      mainImgEl.src = mainSrc;
+      mainImgEl.alt = title;
+    } else {
+      const placeholder = document.createElement("div");
+      placeholder.id = "listingMainImage";
+      placeholder.className =
+        "h-80 w-full bg-slate-100 flex items-center justify-center text-slate-500";
+      placeholder.textContent = "No image";
+
+      mainImgEl.replaceWith(placeholder);
+    }
   }
 
   if (thumbsEl) {
-    thumbsEl.innerHTML = "";
+    thumbsEl.replaceChildren();
+
     if (media.length > 1) {
-      thumbsEl.innerHTML = media
-        .slice(0, 6)
-        .map(
-          (src, i) => `
-          <button data-src="${src}" class="h-16 w-16 overflow-hidden rounded-lg bg-white ring-1 ring-slate-200 hover:ring-accent">
-            <img src="${src}" alt="${title} thumbnail ${i + 1}" class="h-full w-full object-cover" loading="lazy" />
-          </button>
-        `,
-        )
-        .join("");
+      for (const [i, src] of media.slice(0, 6).entries()) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.dataset.src = src;
+        btn.className =
+          "h-16 w-16 overflow-hidden rounded-lg bg-white ring-1 ring-slate-200 hover:ring-accent";
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = `${title} thumbnail ${i + 1}`;
+        img.className = "h-full w-full object-cover";
+        img.loading = "lazy";
+
+        btn.append(img);
+        thumbsEl.append(btn);
+      }
 
       thumbsEl.addEventListener("click", (e) => {
         const btn = e.target.closest("button[data-src]");
@@ -145,9 +157,21 @@ export async function renderSingleListing(listing) {
 
         const src = btn.getAttribute("data-src");
         const main = document.getElementById("listingMainImage");
-        if (main && main.tagName === "IMG") {
-          main.src = src;
+
+        if (!main) return;
+
+        if (main.tagName !== "IMG") {
+          const newImg = document.createElement("img");
+          newImg.id = "listingMainImage";
+          newImg.className = "h-80 w-full object-cover";
+          newImg.alt = title;
+          newImg.src = src;
+
+          main.replaceWith(newImg);
+          return;
         }
+
+        main.src = src;
       });
     }
   }
@@ -155,28 +179,39 @@ export async function renderSingleListing(listing) {
   // Bids list
   function renderBids() {
     if (!bidsEl) return;
-    bidsEl.innerHTML = "";
+    bidsEl.replaceChildren();
 
     if (bids.length === 0) {
-      bidsEl.innerHTML = `<div class="p-4 text-brand">No bids yet.</div>`;
+      const empty = document.createElement("div");
+      empty.className = "p-4 text-brand";
+      empty.textContent = "No bids yet.";
+      bidsEl.append(empty);
       return;
     }
 
-    const rows = [...bids]
-      .sort((a, b) => Number(b.amount) - Number(a.amount))
-      .map((b) => {
-        const name = b.bidderName || b.bidder?.name || "Unknown";
-        const amount = Number(b.amount || 0);
+    const sorted = [...bids].sort(
+      (a, b) => Number(b.amount) - Number(a.amount),
+    );
 
-        return `
-          <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
-            <span class="font-medium text-slate-800">${name}</span>
-            <span class="font-semibold text-brand">${amount} credits</span>
-          </div>
-        `;
-      });
+    for (const b of sorted) {
+      const name = b.bidderName || b.bidder?.name || "Unknown";
+      const amount = Number(b.amount || 0);
 
-    bidsEl.innerHTML = rows.join("");
+      const row = document.createElement("div");
+      row.className =
+        "flex items-center justify-between border-b border-slate-100 px-4 py-3";
+
+      const nameEl = document.createElement("span");
+      nameEl.className = "font-medium text-slate-800";
+      nameEl.textContent = name;
+
+      const amountEl = document.createElement("span");
+      amountEl.className = "font-semibold text-brand";
+      amountEl.textContent = `${amount} credits`;
+
+      row.append(nameEl, amountEl);
+      bidsEl.append(row);
+    }
   }
 
   renderBids();

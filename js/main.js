@@ -72,7 +72,6 @@ async function loadHomeListings() {
   } catch (err) {
     statusEl.textContent = `Could not load listings: ${err.message}`;
     gridEl.innerHTML = "";
-    if (DEBUG) console.error(err);
   }
 }
 
@@ -179,7 +178,6 @@ async function loadBrowseListings() {
       statusEl.textContent = `Could not load listings: ${err.message}`;
       gridEl.innerHTML = "";
       updatePaginationUI(null);
-      if (DEBUG) console.error(err);
     }
   }
 
@@ -251,7 +249,6 @@ async function loadSingleListing() {
     renderSingleListing(listing);
   } catch (err) {
     statusEl.textContent = `Could not load listing: ${err.message}`;
-    if (DEBUG) console.error(err);
   }
 }
 

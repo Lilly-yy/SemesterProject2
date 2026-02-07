@@ -75,7 +75,7 @@ export function initHeader() {
   // --- Logout ---
   const doLogout = () => {
     clearAuth();
-    window.location.href = "index.html";
+    window.location.href = "/";
   };
   logoutBtn?.addEventListener("click", doLogout);
   mobileLogout?.addEventListener("click", doLogout);

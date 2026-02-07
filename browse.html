@@ -40,7 +40,7 @@
       <div class="mx-auto max-w-6xl px-4 py-3">
         <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
           <!-- Logo -->
-          <a href="index.html" class="flex shrink-0 items-center gap-2">
+          <a href="./" class="flex shrink-0 items-center gap-2">
             <img
               src="assets/icons/logo.png"
               alt="The Golden Bid logo"
@@ -163,12 +163,40 @@
             + Create listing
           </a>
 
-          <a
-            href="browse.html"
-            class="block w-full rounded-lg bg-accent px-4 py-3 text-base font-semibold text-center hover:bg-accent-light"
+          <button
+            id="headerMobileSearchToggle"
+            type="button"
+            class="block w-full rounded-lg bg-accent px-4 py-3 text-base font-semibold text-center text-brand hover:bg-accent-light"
           >
             Search auctions
-          </a>
+          </button>
+
+          <form
+            id="headerMobileSearchForm"
+            action="browse.html"
+            method="get"
+            class="hidden"
+            role="search"
+          >
+            <label for="headerMobileSearchInput" class="sr-only"
+              >Search auctions</label
+            >
+            <div class="flex gap-2">
+              <input
+                id="headerMobileSearchInput"
+                name="q"
+                type="search"
+                placeholder="Search auctions…"
+                class="w-full rounded-md bg-white px-3 py-2 text-sm text-brand placeholder:text-brand focus:outline-none focus:ring-2 focus:ring-accent"
+              />
+              <button
+                type="submit"
+                class="shrink-0 rounded-md bg-accent px-3 py-2 text-sm font-semibold text-brand hover:bg-accent-light"
+              >
+                Search
+              </button>
+            </div>
+          </form>
 
           <a
             id="headerMobileProfileLink"
@@ -268,7 +296,7 @@
         class="mx-auto max-w-6xl px-4 py-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-between"
       >
         <!-- Logo -->
-        <a href="index.html" class="flex items-center gap-2">
+        <a href="./" class="flex items-center gap-2">
           <img
             src="assets/icons/logo.png"
             alt="The Golden Bid logo"
